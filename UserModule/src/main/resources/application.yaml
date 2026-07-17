@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: UserModule
+  mongodb:
+    uri: mongodb://localhost:27017/userDB
+    database: userDB
+
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/ecommerce
+#    username: postgres
+#    password: "0007"
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+server:
+  port: 8082

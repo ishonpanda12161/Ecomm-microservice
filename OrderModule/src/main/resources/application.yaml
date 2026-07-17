@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: OrderModule
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: postgres
+    password: "0007"
+  jpa:
+    hibernate:
+      ddl-auto: update
+server:
+  port: 8084
