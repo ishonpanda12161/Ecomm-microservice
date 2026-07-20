@@ -1,0 +1,32 @@
+#Spring
+spring:
+  #Database POSTGRES
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: "ishon"
+    password: "ishon"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #MessageQueue
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: guest
+#    password: guest
+
+#Logging
+logging:
+  level:
+    root: DEBUG
+
+#Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+#Server
+server:
+  port: 8083

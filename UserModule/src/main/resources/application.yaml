@@ -1,16 +1,10 @@
+#Config Server
 spring:
   application:
     name: UserModule
-  mongodb:
-    uri: mongodb://localhost:27017/userDB
-    database: userDB
+  profiles:
+    active: dev
+  config:
+    import: optional:configserver:http://localhost:8888
 
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/ecommerce
-#    username: postgres
-#    password: "0007"
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-server:
-  port: 8082
+

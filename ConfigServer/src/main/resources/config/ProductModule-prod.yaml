@@ -1,0 +1,14 @@
+#Spring
+spring:
+  #Database POSTGRES
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: "ishon"
+    password: "ishon"
+  jpa:
+    hibernate:
+      ddl-auto: validate
+#Logging
+logging:
+  level:
+    root: DEBUG
