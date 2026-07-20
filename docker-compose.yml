@@ -33,7 +33,7 @@ services:
     container_name: mongodb
     restart: unless-stopped
     ports:
-      - "27072:27017"
+      - "27017:27017"
     volumes:
       - mongodb:/data/db
   #RabbitMQ

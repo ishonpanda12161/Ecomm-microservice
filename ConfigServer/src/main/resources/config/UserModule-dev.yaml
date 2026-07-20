@@ -3,7 +3,7 @@ spring:
   #Database -> MongoDB
   data:
     mongodb:
-      uri: mongodb://localhost:27072/userDB
+      uri: mongodb://localhost:27017/userDB
       database: userDB
   #MessageQueue
   rabbitmq:
