@@ -1,27 +1,22 @@
 #Spring
 spring:
   #Database -> MongoDB
-  mongodb:
-    uri: mongodb://localhost:27017/userDB
-    database: userDB
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/userDB
+      database: userDB
   #MessageQueue
-#  rabbitmq:
-#    host: localhost
-#    port: 5672
-#    username: guest
-#    password: guest
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 #Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
-
-#Logging
-logging:
-  level:
-    root: DEBUG
-
+        include: health,info,metrics,busrefresh,refresh
 
 #Server
 server:

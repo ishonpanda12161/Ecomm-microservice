@@ -9,13 +9,21 @@ spring:
     config:
       server:
         native:
-          search-locations: file:///C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\ConfigServer\src\main\resources\config
+#          search-locations: file:///C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\ConfigServer\src\main\resources\config
+          search-locations: file:///home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice/ConfigServer/src/main/resources/config
   #MessageQueue
-#  rabbitmq:
-#    host: localhost
-#    port: 5672
-#    username: guest
-#    password: guest
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+#Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,busrefresh,refresh
 
 #Server
 server:

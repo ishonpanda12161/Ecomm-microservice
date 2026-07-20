@@ -1,0 +1,54 @@
+services:
+  #Postgres Server
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ishon
+      POSTGRES_PASSWORD: ishon
+      POSTGRES_DB: ecommerce
+      PG_DATA: /data/ecommerce
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/data/ecommerce
+  #PG admin panel
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+  #MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb:/data/db
+  #RabbitMQ
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+#Volumes
+volumes:
+  postgres:
+  pgadmin:
+  mongodb:
+  rabbitmq:

@@ -9,23 +9,19 @@ spring:
     hibernate:
       ddl-auto: update
     #MessageQueue
-#  rabbitmq:
-#    host: localhost
-#    port: 5672
-#    username: guest
-#    password: guest
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
-#Logging
-logging:
-  level:
-    root: DEBUG
 
 #Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: health,info,metrics,busrefresh,refresh
 
 #Server
 server:
