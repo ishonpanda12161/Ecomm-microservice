@@ -2,16 +2,17 @@
 spring:
   application:
     name: ConfigServer
-  #Config Server
+  ## Config Server
   profiles:
     active: native
   cloud:
     config:
       server:
         native:
-#          search-locations: file:///C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\ConfigServer\src\main\resources\config
-          search-locations: file:///home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice/ConfigServer/src/main/resources/config
-  #MessageQueue
+          search-locations: file:///C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\ConfigServer\src\main\resources\config
+#          search-locations: file:///home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice/ConfigServer/src/main/resources/config
+          
+  ## MessageQueue
   rabbitmq:
     host: localhost
     port: 5672
@@ -20,10 +21,24 @@ spring:
 
 #Actuator
 management:
+  endpoint:
+    shutdown:
+      access: unrestricted
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,busrefresh,refresh
+        include: health,info,metrics,busrefresh,refresh,shutdown
+
+#Eureka
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
 
 #Server
 server:

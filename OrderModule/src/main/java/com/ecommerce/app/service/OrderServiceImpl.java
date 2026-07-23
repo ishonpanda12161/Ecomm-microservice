@@ -1,10 +1,14 @@
 package com.ecommerce.app.service;
 
+import com.ecommerce.app.config.ProductServiceClient;
+import com.ecommerce.app.config.UserServiceClient;
 import com.ecommerce.app.exception.APIException;
 import com.ecommerce.app.exception.ResourceNotFoundException;
 import com.ecommerce.app.mapper.OrderMapper;
 import com.ecommerce.app.model.*;
 import com.ecommerce.app.payload.OrderResponseDTO;
+import com.ecommerce.app.payload.ProductResponseDTO;
+import com.ecommerce.app.payload.UserResponseDTO;
 import com.ecommerce.app.repository.CartRepository;
 import com.ecommerce.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +27,8 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CartRepository cartRepository;
-    private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+    private final ProductServiceClient productServiceClient;
+    private final UserServiceClient userServiceClient;
 
     @Transactional
     @Override
@@ -37,17 +41,16 @@ public class OrderServiceImpl implements OrderService{
             throw new APIException("Cart is empty.","Empty", LocalDateTime.now());
         }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User","UserId",userId,LocalDateTime.now()));
+        UserResponseDTO user = userServiceClient.getUser(userId);
 
         List<OrderItem> orderItems = cartItems.stream()
                 .map(item ->
                 {
-                    Product product = productRepository.findById(item.getProductId())
-                            .orElseThrow(()-> new ResourceNotFoundException("Product","ProductId",item.getProductId(), LocalDateTime.now()));
+                    ProductResponseDTO product = productServiceClient.getProduct(item.getProductId());
+                    // N+1 optimize fetching product ^
                     BigDecimal totalPrice = (product.getPrice().multiply(BigDecimal.ONE.subtract(product.getDiscount().divide(BigDecimal.valueOf(100)))))
                             .multiply(BigDecimal.valueOf(item.getQuantity()));
-                    product.setStockQuantity(product.getStockQuantity()-item.getQuantity());
+                    productServiceClient.updateProductQuantity(item.getProductId(),product.getStockQuantity()-item.getQuantity());
                     return new OrderItem(product.getId(),item.getQuantity(),totalPrice);
                 }).toList();
 
@@ -59,7 +62,7 @@ public class OrderServiceImpl implements OrderService{
         order.setTotalAmount(totalAmount.setScale(2, RoundingMode.HALF_UP));
         order.setUserId(userId);
 
-        Order savedOrder = orderRepository.save(order);
+        Order savedOrder = orderRepository.saveAndFlush(order);
 
         orderItems.forEach(item -> item.setOrder(savedOrder));
         savedOrder.setItems(orderItems);

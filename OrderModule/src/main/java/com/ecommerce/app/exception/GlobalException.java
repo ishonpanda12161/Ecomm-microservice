@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +18,15 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalException {
 
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<Map<String,Object>> clientException(HttpClientErrorException e)
+    {
+        Map<String,Object> response = new HashMap<>();
+        response.put("Message",e.getMessage());
+        response.put("TimeStamp",LocalDateTime.now());
+
+        return ResponseEntity.badRequest().body(response);
+    }
 
     @ExceptionHandler(APIException.class)
     public ResponseEntity<Map<String,String>> myApiException(APIException e)

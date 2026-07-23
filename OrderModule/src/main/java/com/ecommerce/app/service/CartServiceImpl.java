@@ -1,10 +1,14 @@
 package com.ecommerce.app.service;
 
+import com.ecommerce.app.config.ProductServiceClient;
+import com.ecommerce.app.config.UserServiceClient;
 import com.ecommerce.app.exception.ResourceNotFoundException;
 import com.ecommerce.app.mapper.CartMapper;
 import com.ecommerce.app.model.*;
 import com.ecommerce.app.payload.CartDTO;
 import com.ecommerce.app.payload.CartItemDTO;
+import com.ecommerce.app.payload.ProductResponseDTO;
+import com.ecommerce.app.payload.UserResponseDTO;
 import com.ecommerce.app.repository.CartItemRepository;
 import com.ecommerce.app.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,23 +26,23 @@ public class CartServiceImpl implements CartService{
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final CartMapper cartMapper;
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final ProductServiceClient productServiceClient;
+    private final UserServiceClient userServiceClient;
 
     @Transactional
     @Override
     public Boolean addToCart(String userId, CartItemDTO cartItemDTO) {
 
-        Product product = productRepository.findById(cartItemDTO.getProductId())
-                .orElseThrow(()-> new ResourceNotFoundException("Product","ProductId",cartItemDTO.getProductId(), LocalDateTime.now()));
+
+        ProductResponseDTO product = productServiceClient.getProduct(cartItemDTO.getProductId());
 
         if(product.getStockQuantity()<cartItemDTO.getQuantity())
         {
             return Boolean.FALSE;
         }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User","UserId",userId,LocalDateTime.now()));
+        UserResponseDTO user = userServiceClient.getUser(userId);
+
 
         Cart cart = getUserCart(user.getId());
         CartItem cartItem = cartItemRepository.findByCartAndProductId(cart,cartItemDTO.getProductId());
@@ -64,12 +68,12 @@ public class CartServiceImpl implements CartService{
     @Override
     public CartDTO getCart(String userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User","UserId",userId,LocalDateTime.now()));
+        UserResponseDTO user = userServiceClient.getUser(userId);
+
         Cart cart = getUserCart(user.getId());
 
         CartDTO cartDTO = cartMapper.toDTO(cart);
-        cartDTO.setTotalPrice(calculateTotalPrice(cart,productRepository));
+        cartDTO.setTotalPrice(calculateTotalPrice(cart));
         return cartDTO;
     }
 
@@ -78,16 +82,16 @@ public class CartServiceImpl implements CartService{
     @Override
     public Boolean updateCart(String userId, String productId, String operation) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User","UserId",userId,LocalDateTime.now()));
+        UserResponseDTO user = userServiceClient.getUser(userId);
+
         Cart cart = getUserCart(user.getId());
         CartItem cartItem = cartItemRepository.findByCartAndProductId(cart,productId);
         if(cartItem==null)
         {
             return Boolean.FALSE;
         }
-        Product product = productRepository.findById(productId)
-                .orElseThrow(()-> new ResourceNotFoundException("Product","ProductId",productId, LocalDateTime.now()));
+        ProductResponseDTO product = productServiceClient.getProduct(productId);
+
         int quantity = operation.equalsIgnoreCase("add")
                 ? 1
                 : -1;
@@ -114,14 +118,14 @@ public class CartServiceImpl implements CartService{
     @Override
     public CartDTO deleteFromCart(String userId, String productId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User","UserId",userId,LocalDateTime.now()));
+        UserResponseDTO user = userServiceClient.getUser(userId);
+
         Cart cart = getUserCart(user.getId());
 
         cart.getCartItems().removeIf(cartItem -> cartItem.getProductId().equals(productId));
 
         CartDTO cartDTO = cartMapper.toDTO(cartRepository.save(cart));
-        cartDTO.setTotalPrice(calculateTotalPrice(cart,productRepository));
+        cartDTO.setTotalPrice(calculateTotalPrice(cart));
         return cartDTO;
     }
 
@@ -137,13 +141,12 @@ public class CartServiceImpl implements CartService{
         return cart;
     }
 
-    private BigDecimal calculateTotalPrice(Cart cart, ProductRepository productRepository)
+    private BigDecimal calculateTotalPrice(Cart cart)
     {
         BigDecimal total = cart.getCartItems().stream()
                 .map( item ->
                 {
-                    Product product = productRepository.findById(item.getProductId())
-                            .orElse(null);
+                    ProductResponseDTO product = productServiceClient.getProduct(item.getProductId());
                     if(product!=null) return (product.getPrice().multiply(BigDecimal.ONE.subtract(product.getDiscount().divide(BigDecimal.valueOf(100)))))
                             .multiply(BigDecimal.valueOf(item.getQuantity()));
                     return BigDecimal.ZERO;

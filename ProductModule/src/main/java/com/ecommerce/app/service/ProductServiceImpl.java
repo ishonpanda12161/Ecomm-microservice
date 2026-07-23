@@ -120,6 +120,22 @@ public class ProductServiceImpl implements ProductService{
 
     }
 
+    @Override
+    public ProductResponseDTO getProductById(String id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Product","ProductId",id,LocalDateTime.now()));
+        return productMapper.toDTO(product);
+    }
+
+    @Transactional
+    @Override
+    public void updateProductQuantity(String id, Integer quantity) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Product","ProductId",id,LocalDateTime.now()));
+        product.setStockQuantity(quantity);
+        productRepository.save(product);
+    }
+
 
     @Override
     public ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO,String categoryId) {

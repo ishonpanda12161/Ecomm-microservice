@@ -28,4 +28,9 @@ public interface ProductService {
 
     @Transactional(readOnly = true)
     ProductSearchResponseDTO searchProductsByCategory(String category,Integer pageNum, Integer pageSize, String sortBy, String sortDir);
+
+    ProductResponseDTO getProductById(String id);
+
+    @Transactional
+    void updateProductQuantity(String id, Integer quantity);
 }

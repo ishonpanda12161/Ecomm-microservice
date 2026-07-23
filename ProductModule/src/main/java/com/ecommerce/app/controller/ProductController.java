@@ -29,6 +29,14 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.getAllProducts());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> getProductById(
+            @PathVariable String id
+    )
+    {
+        return ResponseEntity.ok().body(productService.getProductById(id));
+    }
+
     @GetMapping("/search")
     public ResponseEntity<ProductSearchResponseDTO> searchProduct(
             @RequestParam(name = "pageNum",defaultValue = AppConfig.PAGE_NUMBER,required = false) Integer pageNum,
@@ -80,6 +88,16 @@ public class ProductController {
     )
     {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.updateProduct(productRequestDTO,id));
+    }
+
+    @PutMapping("/{id}/{quantity}")
+    public ResponseEntity<Void> updateProductQuantity(
+            @PathVariable Integer quantity,
+            @PathVariable String id
+    )
+    {
+        productService.updateProductQuantity(id,quantity);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

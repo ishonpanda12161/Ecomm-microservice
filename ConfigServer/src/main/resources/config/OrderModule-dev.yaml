@@ -3,8 +3,8 @@ spring:
   #Database POSTGRES
   datasource:
     url: jdbc:postgresql://localhost:5432/ecommerce
-    username: "ishon"
-    password: "ishon"
+    username: "postgres"
+    password: "0007"
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,17 +15,24 @@ spring:
     username: guest
     password: guest
 
-#Logging
-logging:
-  level:
-    root: DEBUG
 
 #Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: health,info,metrics,busrefresh,refresh
+
+#Eureka
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
 
 #Server
 server:
