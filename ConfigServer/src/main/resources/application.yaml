@@ -42,6 +42,8 @@ eureka:
 
 #Logging
 logging:
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%X{traceId}] %logger{36} - %msg%n'
   level:
     root: INFO
   file:
