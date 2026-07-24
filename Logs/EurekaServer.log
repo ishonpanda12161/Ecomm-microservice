@@ -1,0 +1,342 @@
+2026-07-24T13:44:35.229+05:30  INFO 17154 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : Starting EurekaServerApplication using Java 25.0.3 with PID 17154 (/home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice/EurekaServer/target/classes started by ishonpanda in /home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice)
+2026-07-24T13:44:35.231+05:30  INFO 17154 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-07-24T13:44:35.898+05:30  INFO 17154 --- [EurekaServer] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=42d0cc3e-17d0-332b-9e6c-652ad2cfafab
+2026-07-24T13:44:36.055+05:30  INFO 17154 --- [EurekaServer] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8761 (http)
+2026-07-24T13:44:36.063+05:30  INFO 17154 --- [EurekaServer] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-24T13:44:36.064+05:30  INFO 17154 --- [EurekaServer] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-24T13:44:36.093+05:30  INFO 17154 --- [EurekaServer] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 825 ms
+2026-07-24T13:44:36.646+05:30  INFO 17154 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON encoding codec LegacyJacksonJson
+2026-07-24T13:44:36.646+05:30  INFO 17154 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON decoding codec LegacyJacksonJson
+2026-07-24T13:44:36.767+05:30  INFO 17154 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML encoding codec XStreamXml
+2026-07-24T13:44:36.767+05:30  INFO 17154 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML decoding codec XStreamXml
+2026-07-24T13:44:36.876+05:30  INFO 17154 --- [EurekaServer] [main] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-07-24T13:44:37.305+05:30  WARN 17154 --- [EurekaServer] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-07-24T13:44:37.317+05:30  INFO 17154 --- [EurekaServer] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-07-24T13:44:37.328+05:30  INFO 17154 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-07-24T13:44:37.328+05:30  INFO 17154 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Client configured to neither register nor query for data.
+2026-07-24T13:44:37.329+05:30  INFO 17154 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1784880877329 with initial instances count: 0
+2026-07-24T13:44:37.349+05:30  INFO 17154 --- [EurekaServer] [main] c.n.eureka.DefaultEurekaServerContext    : Initializing ...
+2026-07-24T13:44:37.350+05:30  INFO 17154 --- [EurekaServer] [main] c.n.eureka.cluster.PeerEurekaNodes       : Adding new peer nodes [http://localhost:8761/eureka/]
+2026-07-24T13:44:37.411+05:30  INFO 17154 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON encoding codec LegacyJacksonJson
+2026-07-24T13:44:37.411+05:30  INFO 17154 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON decoding codec LegacyJacksonJson
+2026-07-24T13:44:37.411+05:30  INFO 17154 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML encoding codec XStreamXml
+2026-07-24T13:44:37.411+05:30  INFO 17154 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML decoding codec XStreamXml
+2026-07-24T13:44:37.430+05:30  INFO 17154 --- [EurekaServer] [main] c.n.eureka.cluster.PeerEurekaNodes       : Replica node URL:  http://localhost:8761/eureka/
+2026-07-24T13:44:37.434+05:30  INFO 17154 --- [EurekaServer] [main] c.n.e.registry.AbstractInstanceRegistry  : Finished initializing remote region registries. All known remote regions: []
+2026-07-24T13:44:37.434+05:30  INFO 17154 --- [EurekaServer] [main] c.n.eureka.DefaultEurekaServerContext    : Initialized
+2026-07-24T13:44:37.441+05:30  INFO 17154 --- [EurekaServer] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-07-24T13:44:37.488+05:30  INFO 17154 --- [EurekaServer] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application EUREKASERVER with eureka with status UP
+2026-07-24T13:44:37.494+05:30  INFO 17154 --- [EurekaServer] [Thread-9] o.s.c.n.e.server.EurekaServerBootstrap   : isAws returned false
+2026-07-24T13:44:37.495+05:30  INFO 17154 --- [EurekaServer] [Thread-9] o.s.c.n.e.server.EurekaServerBootstrap   : Initialized server context
+2026-07-24T13:44:37.495+05:30  INFO 17154 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Got 1 instances from neighboring DS node
+2026-07-24T13:44:37.495+05:30  INFO 17154 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Renew threshold is: 1
+2026-07-24T13:44:37.495+05:30  INFO 17154 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Changing status to UP
+2026-07-24T13:44:37.496+05:30  INFO 17154 --- [EurekaServer] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8761 (http) with context path '/'
+2026-07-24T13:44:37.496+05:30  INFO 17154 --- [EurekaServer] [Thread-9] e.s.EurekaServerInitializerConfiguration : Started Eureka Server
+2026-07-24T13:44:37.497+05:30  INFO 17154 --- [EurekaServer] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8761
+2026-07-24T13:44:37.504+05:30  INFO 17154 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : Started EurekaServerApplication in 2.644 seconds (process running for 3.228)
+2026-07-24T13:44:38.008+05:30  INFO 17154 --- [EurekaServer] [RMI TCP Connection(2)-192.168.0.186] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-24T13:44:38.009+05:30  INFO 17154 --- [EurekaServer] [RMI TCP Connection(2)-192.168.0.186] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-24T13:44:38.011+05:30  INFO 17154 --- [EurekaServer] [RMI TCP Connection(2)-192.168.0.186] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-07-24T13:44:46.376+05:30  INFO 17154 --- [EurekaServer] [http-nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=false)
+2026-07-24T13:44:46.961+05:30  INFO 17154 --- [EurekaServer] [http-nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=true)
+2026-07-24T13:44:47.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:44:54.791+05:30  INFO 17154 --- [EurekaServer] [http-nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : Registered instance USERMODULE/fedora:UserModule:8082 with status UP (replication=false)
+2026-07-24T13:44:55.307+05:30  INFO 17154 --- [EurekaServer] [http-nio-8761-exec-8] c.n.e.registry.AbstractInstanceRegistry  : Registered instance USERMODULE/fedora:UserModule:8082 with status UP (replication=true)
+2026-07-24T13:44:57.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:45:07.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:45:17.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:45:27.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:45:37.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:45:47.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:45:57.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:46:07.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:46:17.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:46:27.495+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:46:37.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:46:47.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:46:57.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:47:07.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:47:13.503+05:30  INFO 17154 --- [EurekaServer] [http-nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance CONFIGSERVER/fedora:ConfigServer:8888 (replication=false)
+2026-07-24T13:47:13.525+05:30  INFO 17154 --- [EurekaServer] [http-nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance USERMODULE/fedora:UserModule:8082 (replication=false)
+2026-07-24T13:47:14.015+05:30  WARN 17154 --- [EurekaServer] [http-nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: CONFIGSERVER/fedora:ConfigServer:8888
+2026-07-24T13:47:14.016+05:30  INFO 17154 --- [EurekaServer] [http-nio-8761-exec-1] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): CONFIGSERVER - fedora:ConfigServer:8888
+2026-07-24T13:47:14.016+05:30  WARN 17154 --- [EurekaServer] [http-nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: USERMODULE/fedora:UserModule:8082
+2026-07-24T13:47:14.017+05:30  INFO 17154 --- [EurekaServer] [http-nio-8761-exec-1] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): USERMODULE - fedora:UserModule:8082
+2026-07-24T13:47:14.019+05:30  WARN 17154 --- [EurekaServer] [TaskBatchingWorker-target_localhost-8] c.n.eureka.cluster.ReplicationTask       : The replication of task CONFIGSERVER/fedora:ConfigServer:8888:Cancel@localhost failed with response code 404
+2026-07-24T13:47:14.020+05:30  WARN 17154 --- [EurekaServer] [TaskBatchingWorker-target_localhost-8] c.netflix.eureka.cluster.PeerEurekaNode  : CONFIGSERVER/fedora:ConfigServer:8888:Cancel@localhost: missing entry.
+2026-07-24T13:47:14.020+05:30  WARN 17154 --- [EurekaServer] [TaskBatchingWorker-target_localhost-8] c.n.eureka.cluster.ReplicationTask       : The replication of task USERMODULE/fedora:UserModule:8082:Cancel@localhost failed with response code 404
+2026-07-24T13:47:14.020+05:30  WARN 17154 --- [EurekaServer] [TaskBatchingWorker-target_localhost-8] c.netflix.eureka.cluster.PeerEurekaNode  : USERMODULE/fedora:UserModule:8082:Cancel@localhost: missing entry.
+2026-07-24T13:47:17.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:47:27.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:47:37.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:47:47.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:47:57.496+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:48:07.497+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:48:17.497+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:48:27.497+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:48:37.497+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:48:47.497+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:48:57.497+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:49:07.498+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:49:17.498+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:49:27.498+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:49:37.498+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:49:47.498+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:49:57.498+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:50:07.499+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:50:17.499+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:50:27.499+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:50:37.500+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:50:47.500+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:50:57.500+05:30  INFO 17154 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:51:03.993+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application EUREKASERVER with eureka with status DOWN
+2026-07-24T13:51:03.997+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-24T13:51:04.000+05:30  INFO 17154 --- [EurekaServer] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-07-24T13:51:04.004+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.server.EurekaServerBootstrap   : Shutting down Eureka Server..
+2026-07-24T13:51:04.004+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shutting down ...
+2026-07-24T13:51:04.007+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shut down
+2026-07-24T13:51:04.007+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.server.EurekaServerBootstrap   : Eureka Service is now shutdown...
+2026-07-24T13:51:04.008+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shutting down ...
+2026-07-24T13:51:04.008+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shut down
+2026-07-24T13:51:04.005+05:30 ERROR 17154 --- [EurekaServer] [Eureka-Jersey3Client-Conn-Cleaner2] c.n.d.s.t.j.EurekaJersey3ClientImpl      : Cannot clean connections
+
+java.lang.IllegalStateException: Client instance has been closed.
+	at org.glassfish.jersey.internal.guava.Preconditions.checkState(Preconditions.java:169) ~[jersey-common-4.0.2.jar:na]
+	at org.glassfish.jersey.client.JerseyClient.checkNotClosed(JerseyClient.java:248) ~[jersey-client-4.0.2.jar:na]
+	at org.glassfish.jersey.client.JerseyClient.getConfiguration(JerseyClient.java:363) ~[jersey-client-4.0.2.jar:na]
+	at org.glassfish.jersey.client.JerseyClient.getConfiguration(JerseyClient.java:54) ~[jersey-client-4.0.2.jar:na]
+	at com.netflix.discovery.shared.transport.jersey3.EurekaJersey3ClientImpl$ConnectionCleanerTask.run(EurekaJersey3ClientImpl.java:338) ~[eureka-client-jersey3-2.0.6.jar:2.0.6]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545) ~[na:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328) ~[na:na]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:309) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1474) ~[na:na]
+
+2026-07-24T13:51:04.013+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2026-07-24T13:51:04.013+05:30  INFO 17154 --- [EurekaServer] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2026-07-24T13:51:24.466+05:30  INFO 18421 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : Starting EurekaServerApplication using Java 25.0.3 with PID 18421 (/home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice/EurekaServer/target/classes started by ishonpanda in /home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice)
+2026-07-24T13:51:24.469+05:30  INFO 18421 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-07-24T13:51:25.141+05:30  INFO 18421 --- [EurekaServer] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=42d0cc3e-17d0-332b-9e6c-652ad2cfafab
+2026-07-24T13:51:25.300+05:30  INFO 18421 --- [EurekaServer] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8761 (http)
+2026-07-24T13:51:25.309+05:30  INFO 18421 --- [EurekaServer] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-24T13:51:25.309+05:30  INFO 18421 --- [EurekaServer] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-24T13:51:25.337+05:30  INFO 18421 --- [EurekaServer] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 820 ms
+2026-07-24T13:51:25.894+05:30  INFO 18421 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON encoding codec LegacyJacksonJson
+2026-07-24T13:51:25.894+05:30  INFO 18421 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON decoding codec LegacyJacksonJson
+2026-07-24T13:51:26.018+05:30  INFO 18421 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML encoding codec XStreamXml
+2026-07-24T13:51:26.019+05:30  INFO 18421 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML decoding codec XStreamXml
+2026-07-24T13:51:26.125+05:30  INFO 18421 --- [EurekaServer] [main] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-07-24T13:51:26.572+05:30  WARN 18421 --- [EurekaServer] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-07-24T13:51:26.587+05:30  INFO 18421 --- [EurekaServer] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-07-24T13:51:26.598+05:30  INFO 18421 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-07-24T13:51:26.598+05:30  INFO 18421 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Client configured to neither register nor query for data.
+2026-07-24T13:51:26.599+05:30  INFO 18421 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1784881286598 with initial instances count: 0
+2026-07-24T13:51:26.621+05:30  INFO 18421 --- [EurekaServer] [main] c.n.eureka.DefaultEurekaServerContext    : Initializing ...
+2026-07-24T13:51:26.623+05:30  INFO 18421 --- [EurekaServer] [main] c.n.eureka.cluster.PeerEurekaNodes       : Adding new peer nodes [http://localhost:8761/eureka/]
+2026-07-24T13:51:26.687+05:30  INFO 18421 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON encoding codec LegacyJacksonJson
+2026-07-24T13:51:26.687+05:30  INFO 18421 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON decoding codec LegacyJacksonJson
+2026-07-24T13:51:26.687+05:30  INFO 18421 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML encoding codec XStreamXml
+2026-07-24T13:51:26.687+05:30  INFO 18421 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML decoding codec XStreamXml
+2026-07-24T13:51:26.707+05:30  INFO 18421 --- [EurekaServer] [main] c.n.eureka.cluster.PeerEurekaNodes       : Replica node URL:  http://localhost:8761/eureka/
+2026-07-24T13:51:26.712+05:30  INFO 18421 --- [EurekaServer] [main] c.n.e.registry.AbstractInstanceRegistry  : Finished initializing remote region registries. All known remote regions: []
+2026-07-24T13:51:26.712+05:30  INFO 18421 --- [EurekaServer] [main] c.n.eureka.DefaultEurekaServerContext    : Initialized
+2026-07-24T13:51:26.719+05:30  INFO 18421 --- [EurekaServer] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-07-24T13:51:26.763+05:30  INFO 18421 --- [EurekaServer] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application EUREKASERVER with eureka with status UP
+2026-07-24T13:51:26.770+05:30  INFO 18421 --- [EurekaServer] [Thread-9] o.s.c.n.e.server.EurekaServerBootstrap   : isAws returned false
+2026-07-24T13:51:26.770+05:30  INFO 18421 --- [EurekaServer] [Thread-9] o.s.c.n.e.server.EurekaServerBootstrap   : Initialized server context
+2026-07-24T13:51:26.770+05:30  INFO 18421 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Got 1 instances from neighboring DS node
+2026-07-24T13:51:26.770+05:30  INFO 18421 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Renew threshold is: 1
+2026-07-24T13:51:26.770+05:30  INFO 18421 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Changing status to UP
+2026-07-24T13:51:26.772+05:30  INFO 18421 --- [EurekaServer] [Thread-9] e.s.EurekaServerInitializerConfiguration : Started Eureka Server
+2026-07-24T13:51:26.772+05:30  INFO 18421 --- [EurekaServer] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8761 (http) with context path '/'
+2026-07-24T13:51:26.773+05:30  INFO 18421 --- [EurekaServer] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8761
+2026-07-24T13:51:26.781+05:30  INFO 18421 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : Started EurekaServerApplication in 2.703 seconds (process running for 3.284)
+2026-07-24T13:51:27.267+05:30  INFO 18421 --- [EurekaServer] [RMI TCP Connection(2)-192.168.0.186] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-24T13:51:27.268+05:30  INFO 18421 --- [EurekaServer] [RMI TCP Connection(2)-192.168.0.186] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-24T13:51:27.270+05:30  INFO 18421 --- [EurekaServer] [RMI TCP Connection(2)-192.168.0.186] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-07-24T13:51:36.771+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:51:46.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:51:56.771+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:52:05.382+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=false)
+2026-07-24T13:52:05.976+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=true)
+2026-07-24T13:52:06.771+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:52:16.771+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:52:26.771+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:52:36.382+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : Registered instance USERMODULE/fedora:UserModule:8082 with status UP (replication=false)
+2026-07-24T13:52:36.771+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:52:36.893+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Registered instance USERMODULE/fedora:UserModule:8082 with status UP (replication=true)
+2026-07-24T13:52:46.771+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:52:56.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:53:06.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:53:16.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:53:26.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:53:36.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:53:46.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:53:56.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:54:00.678+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance CONFIGSERVER/fedora:ConfigServer:8888 (replication=false)
+2026-07-24T13:54:00.699+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-6] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance USERMODULE/fedora:UserModule:8082 (replication=false)
+2026-07-24T13:54:01.004+05:30  WARN 18421 --- [EurekaServer] [http-nio-8761-exec-8] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: lease doesn't exist, registering resource: CONFIGSERVER - fedora:ConfigServer:8888
+2026-07-24T13:54:01.004+05:30  WARN 18421 --- [EurekaServer] [http-nio-8761-exec-8] c.n.eureka.resources.InstanceResource    : Not Found (Renew): CONFIGSERVER - fedora:ConfigServer:8888
+2026-07-24T13:54:01.004+05:30  WARN 18421 --- [EurekaServer] [http-nio-8761-exec-8] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: CONFIGSERVER/fedora:ConfigServer:8888
+2026-07-24T13:54:01.005+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-8] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): CONFIGSERVER - fedora:ConfigServer:8888
+2026-07-24T13:54:01.005+05:30  WARN 18421 --- [EurekaServer] [http-nio-8761-exec-8] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: USERMODULE/fedora:UserModule:8082
+2026-07-24T13:54:01.005+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-8] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): USERMODULE - fedora:UserModule:8082
+2026-07-24T13:54:01.006+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-11] c.n.eureka.cluster.ReplicationTask       : The replication of task CONFIGSERVER/fedora:ConfigServer:8888:Heartbeat@localhost failed with response code 404
+2026-07-24T13:54:01.007+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-11] c.netflix.eureka.cluster.PeerEurekaNode  : CONFIGSERVER/fedora:ConfigServer:8888:Heartbeat@localhost: missing entry.
+2026-07-24T13:54:01.007+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-11] c.netflix.eureka.cluster.PeerEurekaNode  : CONFIGSERVER/fedora:ConfigServer:8888:Heartbeat@localhost: cannot find instance id fedora:ConfigServer:8888 and hence replicating the instance with status UP
+2026-07-24T13:54:01.007+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-11] c.n.eureka.cluster.ReplicationTask       : The replication of task CONFIGSERVER/fedora:ConfigServer:8888:Cancel@localhost failed with response code 404
+2026-07-24T13:54:01.007+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-11] c.netflix.eureka.cluster.PeerEurekaNode  : CONFIGSERVER/fedora:ConfigServer:8888:Cancel@localhost: missing entry.
+2026-07-24T13:54:01.007+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-11] c.n.eureka.cluster.ReplicationTask       : The replication of task USERMODULE/fedora:UserModule:8082:Cancel@localhost failed with response code 404
+2026-07-24T13:54:01.007+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-11] c.netflix.eureka.cluster.PeerEurekaNode  : USERMODULE/fedora:UserModule:8082:Cancel@localhost: missing entry.
+2026-07-24T13:54:01.519+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=true)
+2026-07-24T13:54:06.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:54:16.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:54:16.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Evicting 1 items (expired=1, evictionLimit=1)
+2026-07-24T13:54:16.772+05:30  WARN 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: expired lease for CONFIGSERVER/fedora:ConfigServer:8888
+2026-07-24T13:54:16.772+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance CONFIGSERVER/fedora:ConfigServer:8888 (replication=false)
+2026-07-24T13:54:26.773+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:54:36.773+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:54:46.773+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:54:56.773+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:55:06.773+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:55:16.773+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:55:26.773+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:55:36.773+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:55:46.774+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:55:56.774+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:56:06.774+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:56:16.774+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:56:26.774+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:56:36.774+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:56:46.774+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:56:50.134+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=false)
+2026-07-24T13:56:50.647+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-4] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=true)
+2026-07-24T13:56:56.774+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:57:00.153+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance CONFIGSERVER/fedora:ConfigServer:8888 (replication=false)
+2026-07-24T13:57:00.665+05:30  WARN 18421 --- [EurekaServer] [http-nio-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: CONFIGSERVER/fedora:ConfigServer:8888
+2026-07-24T13:57:00.665+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-10] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): CONFIGSERVER - fedora:ConfigServer:8888
+2026-07-24T13:57:00.667+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-0] c.n.eureka.cluster.ReplicationTask       : The replication of task CONFIGSERVER/fedora:ConfigServer:8888:Cancel@localhost failed with response code 404
+2026-07-24T13:57:00.668+05:30  WARN 18421 --- [EurekaServer] [TaskBatchingWorker-target_localhost-0] c.netflix.eureka.cluster.PeerEurekaNode  : CONFIGSERVER/fedora:ConfigServer:8888:Cancel@localhost: missing entry.
+2026-07-24T13:57:06.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:57:16.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:57:26.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:57:36.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:57:46.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:57:48.446+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=false)
+2026-07-24T13:57:48.959+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=true)
+2026-07-24T13:57:56.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:58:06.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:58:06.785+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : Registered instance USERMODULE/fedora:UserModule:8082 with status UP (replication=false)
+2026-07-24T13:58:07.298+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-4] c.n.e.registry.AbstractInstanceRegistry  : Registered instance USERMODULE/fedora:UserModule:8082 with status UP (replication=true)
+2026-07-24T13:58:16.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:58:26.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:58:36.775+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:58:46.776+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:58:56.776+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:59:06.776+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:59:16.777+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:59:26.777+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:59:36.777+05:30  INFO 18421 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T13:59:44.666+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application EUREKASERVER with eureka with status DOWN
+2026-07-24T13:59:44.670+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-4] c.n.e.registry.AbstractInstanceRegistry  : Registered instance USERMODULE/fedora:UserModule:8082 with status DOWN (replication=false)
+2026-07-24T13:59:44.670+05:30  INFO 18421 --- [EurekaServer] [http-nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status DOWN (replication=false)
+2026-07-24T13:59:44.670+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-24T13:59:44.675+05:30  INFO 18421 --- [EurekaServer] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-07-24T13:59:44.679+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.server.EurekaServerBootstrap   : Shutting down Eureka Server..
+2026-07-24T13:59:44.680+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shutting down ...
+2026-07-24T13:59:44.684+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shut down
+2026-07-24T13:59:44.684+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.server.EurekaServerBootstrap   : Eureka Service is now shutdown...
+2026-07-24T13:59:44.684+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shutting down ...
+2026-07-24T13:59:44.685+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shut down
+2026-07-24T13:59:44.690+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2026-07-24T13:59:44.690+05:30  INFO 18421 --- [EurekaServer] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2026-07-24T14:01:09.632+05:30  INFO 21384 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : Starting EurekaServerApplication using Java 25.0.3 with PID 21384 (/home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice/EurekaServer/target/classes started by ishonpanda in /home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice)
+2026-07-24T14:01:09.635+05:30  INFO 21384 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-07-24T14:01:10.347+05:30  INFO 21384 --- [EurekaServer] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=42d0cc3e-17d0-332b-9e6c-652ad2cfafab
+2026-07-24T14:01:10.510+05:30  INFO 21384 --- [EurekaServer] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8761 (http)
+2026-07-24T14:01:10.518+05:30  INFO 21384 --- [EurekaServer] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-24T14:01:10.519+05:30  INFO 21384 --- [EurekaServer] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-24T14:01:10.548+05:30  INFO 21384 --- [EurekaServer] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 870 ms
+2026-07-24T14:01:11.122+05:30  INFO 21384 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON encoding codec LegacyJacksonJson
+2026-07-24T14:01:11.122+05:30  INFO 21384 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON decoding codec LegacyJacksonJson
+2026-07-24T14:01:11.248+05:30  INFO 21384 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML encoding codec XStreamXml
+2026-07-24T14:01:11.249+05:30  INFO 21384 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML decoding codec XStreamXml
+2026-07-24T14:01:11.357+05:30  INFO 21384 --- [EurekaServer] [main] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-07-24T14:01:11.788+05:30  WARN 21384 --- [EurekaServer] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-07-24T14:01:11.802+05:30  INFO 21384 --- [EurekaServer] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-07-24T14:01:11.812+05:30  INFO 21384 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-07-24T14:01:11.813+05:30  INFO 21384 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Client configured to neither register nor query for data.
+2026-07-24T14:01:11.814+05:30  INFO 21384 --- [EurekaServer] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1784881871813 with initial instances count: 0
+2026-07-24T14:01:11.846+05:30  INFO 21384 --- [EurekaServer] [main] c.n.eureka.DefaultEurekaServerContext    : Initializing ...
+2026-07-24T14:01:11.847+05:30  INFO 21384 --- [EurekaServer] [main] c.n.eureka.cluster.PeerEurekaNodes       : Adding new peer nodes [http://localhost:8761/eureka/]
+2026-07-24T14:01:11.898+05:30  INFO 21384 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON encoding codec LegacyJacksonJson
+2026-07-24T14:01:11.899+05:30  INFO 21384 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON decoding codec LegacyJacksonJson
+2026-07-24T14:01:11.899+05:30  INFO 21384 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML encoding codec XStreamXml
+2026-07-24T14:01:11.899+05:30  INFO 21384 --- [EurekaServer] [main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML decoding codec XStreamXml
+2026-07-24T14:01:11.917+05:30  INFO 21384 --- [EurekaServer] [main] c.n.eureka.cluster.PeerEurekaNodes       : Replica node URL:  http://localhost:8761/eureka/
+2026-07-24T14:01:11.922+05:30  INFO 21384 --- [EurekaServer] [main] c.n.e.registry.AbstractInstanceRegistry  : Finished initializing remote region registries. All known remote regions: []
+2026-07-24T14:01:11.922+05:30  INFO 21384 --- [EurekaServer] [main] c.n.eureka.DefaultEurekaServerContext    : Initialized
+2026-07-24T14:01:11.929+05:30  INFO 21384 --- [EurekaServer] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-07-24T14:01:11.975+05:30  INFO 21384 --- [EurekaServer] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application EUREKASERVER with eureka with status UP
+2026-07-24T14:01:11.981+05:30  INFO 21384 --- [EurekaServer] [Thread-9] o.s.c.n.e.server.EurekaServerBootstrap   : isAws returned false
+2026-07-24T14:01:11.982+05:30  INFO 21384 --- [EurekaServer] [Thread-9] o.s.c.n.e.server.EurekaServerBootstrap   : Initialized server context
+2026-07-24T14:01:11.982+05:30  INFO 21384 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Got 1 instances from neighboring DS node
+2026-07-24T14:01:11.982+05:30  INFO 21384 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Renew threshold is: 1
+2026-07-24T14:01:11.982+05:30  INFO 21384 --- [EurekaServer] [Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Changing status to UP
+2026-07-24T14:01:11.983+05:30  INFO 21384 --- [EurekaServer] [Thread-9] e.s.EurekaServerInitializerConfiguration : Started Eureka Server
+2026-07-24T14:01:11.983+05:30  INFO 21384 --- [EurekaServer] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8761 (http) with context path '/'
+2026-07-24T14:01:11.984+05:30  INFO 21384 --- [EurekaServer] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8761
+2026-07-24T14:01:11.991+05:30  INFO 21384 --- [EurekaServer] [main] c.a.e.EurekaServerApplication            : Started EurekaServerApplication in 2.737 seconds (process running for 3.346)
+2026-07-24T14:01:12.485+05:30  INFO 21384 --- [EurekaServer] [RMI TCP Connection(3)-192.168.0.186] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-24T14:01:12.485+05:30  INFO 21384 --- [EurekaServer] [RMI TCP Connection(3)-192.168.0.186] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-24T14:01:12.487+05:30  INFO 21384 --- [EurekaServer] [RMI TCP Connection(3)-192.168.0.186] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-07-24T14:01:21.982+05:30  INFO 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T14:01:22.507+05:30  INFO 21384 --- [EurekaServer] [http-nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=false)
+2026-07-24T14:01:23.098+05:30  INFO 21384 --- [EurekaServer] [http-nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=true)
+2026-07-24T14:01:31.982+05:30  INFO 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T14:01:32.841+05:30  INFO 21384 --- [EurekaServer] [http-nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance CONFIGSERVER/fedora:ConfigServer:8888 (replication=false)
+2026-07-24T14:01:32.942+05:30  WARN 21384 --- [EurekaServer] [http-nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: lease doesn't exist, registering resource: CONFIGSERVER - fedora:ConfigServer:8888
+2026-07-24T14:01:32.943+05:30  WARN 21384 --- [EurekaServer] [http-nio-8761-exec-9] c.n.eureka.resources.InstanceResource    : Not Found (Renew): CONFIGSERVER - fedora:ConfigServer:8888
+2026-07-24T14:01:32.943+05:30  WARN 21384 --- [EurekaServer] [http-nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: CONFIGSERVER/fedora:ConfigServer:8888
+2026-07-24T14:01:32.943+05:30  INFO 21384 --- [EurekaServer] [http-nio-8761-exec-9] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): CONFIGSERVER - fedora:ConfigServer:8888
+2026-07-24T14:01:32.945+05:30  WARN 21384 --- [EurekaServer] [TaskBatchingWorker-target_localhost-5] c.n.eureka.cluster.ReplicationTask       : The replication of task CONFIGSERVER/fedora:ConfigServer:8888:Heartbeat@localhost failed with response code 404
+2026-07-24T14:01:32.946+05:30  WARN 21384 --- [EurekaServer] [TaskBatchingWorker-target_localhost-5] c.netflix.eureka.cluster.PeerEurekaNode  : CONFIGSERVER/fedora:ConfigServer:8888:Heartbeat@localhost: missing entry.
+2026-07-24T14:01:32.946+05:30  WARN 21384 --- [EurekaServer] [TaskBatchingWorker-target_localhost-5] c.netflix.eureka.cluster.PeerEurekaNode  : CONFIGSERVER/fedora:ConfigServer:8888:Heartbeat@localhost: cannot find instance id fedora:ConfigServer:8888 and hence replicating the instance with status UP
+2026-07-24T14:01:32.946+05:30  WARN 21384 --- [EurekaServer] [TaskBatchingWorker-target_localhost-5] c.n.eureka.cluster.ReplicationTask       : The replication of task CONFIGSERVER/fedora:ConfigServer:8888:Cancel@localhost failed with response code 404
+2026-07-24T14:01:32.946+05:30  WARN 21384 --- [EurekaServer] [TaskBatchingWorker-target_localhost-5] c.netflix.eureka.cluster.PeerEurekaNode  : CONFIGSERVER/fedora:ConfigServer:8888:Cancel@localhost: missing entry.
+2026-07-24T14:01:33.460+05:30  INFO 21384 --- [EurekaServer] [http-nio-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Registered instance CONFIGSERVER/fedora:ConfigServer:8888 with status UP (replication=true)
+2026-07-24T14:01:41.982+05:30  INFO 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T14:01:51.982+05:30  INFO 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T14:01:51.983+05:30  INFO 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Evicting 1 items (expired=1, evictionLimit=1)
+2026-07-24T14:01:51.983+05:30  WARN 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: expired lease for CONFIGSERVER/fedora:ConfigServer:8888
+2026-07-24T14:01:51.983+05:30  INFO 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance CONFIGSERVER/fedora:ConfigServer:8888 (replication=false)
+2026-07-24T14:02:01.982+05:30  INFO 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T14:02:11.983+05:30  INFO 21384 --- [EurekaServer] [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-07-24T14:02:18.700+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application EUREKASERVER with eureka with status DOWN
+2026-07-24T14:02:18.704+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-24T14:02:18.708+05:30  INFO 21384 --- [EurekaServer] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-07-24T14:02:18.710+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.server.EurekaServerBootstrap   : Shutting down Eureka Server..
+2026-07-24T14:02:18.710+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shutting down ...
+2026-07-24T14:02:18.713+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shut down
+2026-07-24T14:02:18.714+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] o.s.c.n.e.server.EurekaServerBootstrap   : Eureka Service is now shutdown...
+2026-07-24T14:02:18.711+05:30 ERROR 21384 --- [EurekaServer] [Eureka-Jersey3Client-Conn-Cleaner2] c.n.d.s.t.j.EurekaJersey3ClientImpl      : Cannot clean connections
+
+java.lang.IllegalStateException: Client instance has been closed.
+	at org.glassfish.jersey.internal.guava.Preconditions.checkState(Preconditions.java:169) ~[jersey-common-4.0.2.jar:na]
+	at org.glassfish.jersey.client.JerseyClient.checkNotClosed(JerseyClient.java:248) ~[jersey-client-4.0.2.jar:na]
+	at org.glassfish.jersey.client.JerseyClient.getConfiguration(JerseyClient.java:363) ~[jersey-client-4.0.2.jar:na]
+	at org.glassfish.jersey.client.JerseyClient.getConfiguration(JerseyClient.java:54) ~[jersey-client-4.0.2.jar:na]
+	at com.netflix.discovery.shared.transport.jersey3.EurekaJersey3ClientImpl$ConnectionCleanerTask.run(EurekaJersey3ClientImpl.java:338) ~[eureka-client-jersey3-2.0.6.jar:2.0.6]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545) ~[na:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328) ~[na:na]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:309) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1474) ~[na:na]
+
+2026-07-24T14:02:18.714+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shutting down ...
+2026-07-24T14:02:18.714+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] c.n.eureka.DefaultEurekaServerContext    : Shut down
+2026-07-24T14:02:18.719+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2026-07-24T14:02:18.719+05:30  INFO 21384 --- [EurekaServer] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient

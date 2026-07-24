@@ -15,6 +15,12 @@ spring:
     username: guest
     password: guest
 
+#Logging
+logging:
+  level:
+    root: INFO
+  file:
+    name: Logs/${spring.application.name}.log
 
 #Actuator
 management:

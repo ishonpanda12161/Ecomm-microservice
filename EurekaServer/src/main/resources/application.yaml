@@ -13,6 +13,13 @@ eureka:
     eviction-interval-timer-in-ms: 10000
     renewal-percent-threshold: 0.85
 
+#Logging
+logging:
+  level:
+    root: INFO
+  file:
+    name: Logs/${spring.application.name}.log
+
 #Server
 server:
   port: 8761

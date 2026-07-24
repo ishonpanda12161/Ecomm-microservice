@@ -5,8 +5,8 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ishon
-      POSTGRES_PASSWORD: ishon
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "0007"
       POSTGRES_DB: ecommerce
       PG_DATA: /data/ecommerce
     ports:
