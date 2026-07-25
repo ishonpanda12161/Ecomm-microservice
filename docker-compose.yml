@@ -49,6 +49,14 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
+  #Zipkin
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    restart: unless-stopped
+    ports:
+      - "9411:9411"
+
 #Volumes
 volumes:
   postgres:
