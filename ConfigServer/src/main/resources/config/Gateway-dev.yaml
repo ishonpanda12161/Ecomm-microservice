@@ -1,0 +1,62 @@
+#Server
+server:
+  port: 8080
+
+#Actuator + Zipkin
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,busrefresh,refresh,prometheus,gateway
+  tracing:
+    sampling:
+      probability: 1.0
+
+#Eureka
+eureka:
+  client:
+    refresh:
+      enable: false
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    hostname: localhost
+    instanceId: ${spring.application.name}:${server.port}
+
+#Logging
+logging:
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%X{traceId}] %logger{36} - %msg%n'
+  level:
+    root: INFO
+  file:
+    name: Logs/${spring.application.name}.log
+
+#Gateway
+spring:
+  cloud:
+    refresh:
+      never-refreshable:
+        - com.netflix.discovery.EurekaClient
+        - com.netflix.discovery.DiscoveryClient
+        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+    gateway:
+      server:
+        webflux:
+          routes:
+          - id: user-module
+            uri: http://localhost:8082
+            predicates:
+              - Path=/api/user/**,/api/address/**
+          - id: product-module
+            uri: http://localhost:8083
+            predicates:
+              - Path=/api/category/**,/api/product/**
+          - id: order-module
+            uri: http://localhost:8084
+            predicates:
+              - Path=/api/cart/**,/api/order/**

@@ -6,12 +6,17 @@ spring:
   profiles:
     active: native
   cloud:
+    refresh:
+      never-refreshable:
+        - com.netflix.discovery.EurekaClient
+        - com.netflix.discovery.DiscoveryClient
+        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
     config:
       server:
         native:
-#          search-locations: file:///C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\ConfigServer\src\main\resources\config
-          search-locations: file:///home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice/ConfigServer/src/main/resources/config
-          
+          search-locations: file:///C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\ConfigServer\src\main\resources\config
+#          search-locations: file:///home/ishonpanda/Desktop/CAREER/PROJECTS/ECOMM/Ecomm-microservice/ConfigServer/src/main/resources/config
+
   ## MessageQueue
   rabbitmq:
     host: localhost
@@ -39,6 +44,8 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
+    hostname: localhost
+    instance-id: ${spring.application.name}:${server.port}
 
 #Logging
 logging:

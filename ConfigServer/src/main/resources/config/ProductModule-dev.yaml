@@ -14,7 +14,12 @@ spring:
     port: 5672
     username: guest
     password: guest
-
+  cloud:
+    refresh:
+      never-refreshable:
+        - com.netflix.discovery.EurekaClient
+        - com.netflix.discovery.DiscoveryClient
+        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
 #Logging
 logging:
   pattern:
@@ -25,15 +30,21 @@ logging:
     name: Logs/${spring.application.name}.log
 
 
-#Actuator
+#Actuator + Zipkin
 management:
   endpoints:
     web:
       exposure:
         include: health,info,metrics,busrefresh,refresh,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+
 #Eureka
 eureka:
   client:
+    refresh:
+      enable: false
     register-with-eureka: true
     fetch-registry: true
     service-url:
@@ -41,6 +52,8 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
+    hostname: localhost
+    instanceId: ${spring.application.name}:${server.port}
 
 #Server
 server:

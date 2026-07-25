@@ -2,3 +2,4 @@
 Logs/
 Logging/loki/.data/
 Logging/prometheus-metrics/.data
+Zipkin/
