@@ -44,19 +44,19 @@ spring:
         - com.netflix.discovery.EurekaClient
         - com.netflix.discovery.DiscoveryClient
         - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
-    gateway:
-      server:
-        webflux:
-          routes:
-          - id: user-module
-            uri: http://localhost:8082
-            predicates:
-              - Path=/api/user/**,/api/address/**
-          - id: product-module
-            uri: http://localhost:8083
-            predicates:
-              - Path=/api/category/**,/api/product/**
-          - id: order-module
-            uri: http://localhost:8084
-            predicates:
-              - Path=/api/cart/**,/api/order/**
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#          - id: user-module
+#            uri: lb://USERMODULE
+#            predicates:
+#              - Path=/api/user/**,/api/address/**
+#          - id: product-module
+#            uri: lb://PRODUCTMODULE
+#            predicates:
+#              - Path=/api/category/**,/api/product/**
+#          - id: order-module
+#            uri: lb://ORDERMODULE
+#            predicates:
+#              - Path=/api/cart/**,/api/order/**

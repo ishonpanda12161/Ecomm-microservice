@@ -7,10 +7,7 @@ spring:
     active: native
   cloud:
     refresh:
-      never-refreshable:
-        - com.netflix.discovery.EurekaClient
-        - com.netflix.discovery.DiscoveryClient
-        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+      enabled: false
     config:
       server:
         native:
