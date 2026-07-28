@@ -3,6 +3,7 @@ package com.ecommerce.app.controller;
 import com.ecommerce.app.model.OrderStatus;
 import com.ecommerce.app.payload.OrderResponseDTO;
 import com.ecommerce.app.service.OrderService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,17 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    @GetMapping("/message")
+    @RateLimiter(name = "orderRate",fallbackMethod = "fallbackMethod")
+    public String mesasge()
+    {
+        return "Pinging server...";
+    }
+
+    private String fallbackMethod()
+    {
+        return "Request Limit reached";
+    }
     @GetMapping()
     public ResponseEntity<List<OrderResponseDTO>> getUserOrders(
             @RequestHeader("USER_ID") String userId

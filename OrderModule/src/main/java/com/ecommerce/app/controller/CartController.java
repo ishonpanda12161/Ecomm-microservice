@@ -25,7 +25,12 @@ public class CartController {
             @RequestBody @Valid CartItemDTO cartItemDTO
     )
     {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.addToCart(userId,cartItemDTO));
+        Boolean response = cartService.addToCart(userId,cartItemDTO);
+        if(!response)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping()

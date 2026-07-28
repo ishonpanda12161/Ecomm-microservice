@@ -4,10 +4,16 @@ server:
 
 #Actuator + Zipkin
 management:
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      circuitbreakers:
+        enabled: true
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,busrefresh,refresh,prometheus,gateway
+        include: health,info,metrics,busrefresh,refresh,prometheus,gateway,circuitbreakers
   tracing:
     sampling:
       probability: 1.0
@@ -38,6 +44,10 @@ logging:
 
 #Gateway
 spring:
+  data:
+    redis:
+      host: localhost
+      port: 6500
   cloud:
     refresh:
       never-refreshable:
@@ -60,3 +70,17 @@ spring:
 #            uri: lb://ORDERMODULE
 #            predicates:
 #              - Path=/api/cart/**,/api/order/**
+
+#Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      gatewayBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 10
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-type: count_based

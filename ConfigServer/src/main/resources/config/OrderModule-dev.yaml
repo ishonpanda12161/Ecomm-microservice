@@ -31,10 +31,16 @@ logging:
 
 #Actuator + Zipkin
 management:
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      circuitbreakers:
+        enabled: true
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,busrefresh,refresh,prometheus
+        include: health,info,metrics,busrefresh,refresh,prometheus,circuitbreakers
   tracing:
     sampling:
       probability: 1.0
@@ -54,6 +60,35 @@ eureka:
     hostname: localhost
     instanceId: ${spring.application.name}:${server.port}
 
+#CircuitBreaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      orderBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 10
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-type: count_based
+  retry:
+    instances:
+      orderRetry:
+        maxAttempts: 5
+        waitDuration: 500ms
+        intervalFunction:
+          type: exponential
+          initialInterval: 500ms
+          multiplier: 1.5
+          maxInterval: 5s
+  ratelimiter:
+    instances:
+      orderRate:
+        timeout-duration: 0
+        limit-refresh-period: 5s
+        limit-for-period: 10
 #Server
 server:
   port: 8084

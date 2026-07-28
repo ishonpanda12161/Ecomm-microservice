@@ -11,6 +11,9 @@ import com.ecommerce.app.payload.ProductResponseDTO;
 import com.ecommerce.app.payload.UserResponseDTO;
 import com.ecommerce.app.repository.CartItemRepository;
 import com.ecommerce.app.repository.CartRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
@@ -28,12 +31,15 @@ public class CartServiceImpl implements CartService{
     private final CartMapper cartMapper;
     private final ProductServiceClient productServiceClient;
     private final UserServiceClient userServiceClient;
+    int attempt = 0;
 
+    @Retry(name = "orderRetry",fallbackMethod = "addToCartFallback")
+//    @CircuitBreaker(name = "orderBreaker",fallbackMethod = "addToCartFallback")
     @Transactional
     @Override
     public Boolean addToCart(String userId, CartItemDTO cartItemDTO) {
 
-
+        System.out.println("Attempt Count = " + attempt++);
         ProductResponseDTO product = productServiceClient.getProduct(cartItemDTO.getProductId());
 
         if(product.getStockQuantity()<cartItemDTO.getQuantity())
@@ -42,7 +48,6 @@ public class CartServiceImpl implements CartService{
         }
 
         UserResponseDTO user = userServiceClient.getUser(userId);
-
 
         Cart cart = getUserCart(user.getId());
         CartItem cartItem = cartItemRepository.findByCartAndProductId(cart,cartItemDTO.getProductId());
@@ -63,6 +68,12 @@ public class CartServiceImpl implements CartService{
         return Boolean.TRUE;
     }
 
+
+    public Boolean addToCartFallback(String userId, CartItemDTO cartItemDTO,Exception e)
+    {
+        System.out.println("Fallback called");
+        return false;
+    }
 
     @Transactional(readOnly = true)
     @Override
