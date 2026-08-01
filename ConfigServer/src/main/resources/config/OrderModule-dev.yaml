@@ -10,16 +10,30 @@ spring:
       ddl-auto: update
     #MessageQueue
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    connection-timeout: 30000
+    virtual-host: ${RABBITMQ_VHOST}
   cloud:
     refresh:
       never-refreshable:
         - com.netflix.discovery.EurekaClient
         - com.netflix.discovery.DiscoveryClient
         - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+
+#Order : Queue and Exchange
+rabbitmq:
+  exchange:
+    name: ecomm.exchange
+  key:
+    created: order.created
+    cancelled: order.cancelled
+    delivered: order.delivered
+    confirmed: order.confirmed
+    shipped: order.shipped
+
 #Logging
 logging:
   pattern:
@@ -64,31 +78,63 @@ eureka:
 resilience4j:
   circuitbreaker:
     instances:
-      orderBreaker:
+      #Breaker for Product
+      productBreaker:
         register-health-indicator: true
-        sliding-window-size: 10
-        minimum-number-of-calls: 10
-        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 3
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 2
         wait-duration-in-open-state: 10s
         failure-rate-threshold: 50
         automatic-transition-from-open-to-half-open-enabled: true
         sliding-window-type: count_based
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException
+
+      #Breaker for User
+      userBreaker:
+        register-health-indicator: true
+        sliding-window-size: 3
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 2
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-type: count_based
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException
+
   retry:
     instances:
-      orderRetry:
-        maxAttempts: 5
+      #Retry for Product
+      productRetry:
+        maxAttempts: 3
         waitDuration: 500ms
         intervalFunction:
           type: exponential
           initialInterval: 500ms
           multiplier: 1.5
           maxInterval: 5s
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException
+      #Retry for User
+      userRetry:
+        maxAttempts: 3
+        waitDuration: 500ms
+        intervalFunction:
+          type: exponential
+          initialInterval: 500ms
+          multiplier: 1.5
+          maxInterval: 5s
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException
   ratelimiter:
     instances:
       orderRate:
         timeout-duration: 0
         limit-refresh-period: 5s
         limit-for-period: 10
+
 #Server
 server:
   port: 8084

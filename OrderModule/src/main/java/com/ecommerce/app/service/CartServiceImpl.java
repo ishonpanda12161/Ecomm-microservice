@@ -1,53 +1,48 @@
 package com.ecommerce.app.service;
 
-import com.ecommerce.app.config.ProductServiceClient;
-import com.ecommerce.app.config.UserServiceClient;
-import com.ecommerce.app.exception.ResourceNotFoundException;
+import com.ecommerce.app.config.HttpService.ProductService;
+import com.ecommerce.app.config.HttpService.UserService;
 import com.ecommerce.app.mapper.CartMapper;
-import com.ecommerce.app.model.*;
+import com.ecommerce.app.model.Cart;
+import com.ecommerce.app.model.CartItem;
 import com.ecommerce.app.payload.CartDTO;
 import com.ecommerce.app.payload.CartItemDTO;
 import com.ecommerce.app.payload.ProductResponseDTO;
 import com.ecommerce.app.payload.UserResponseDTO;
 import com.ecommerce.app.repository.CartItemRepository;
 import com.ecommerce.app.repository.CartRepository;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements CartService{
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final CartMapper cartMapper;
-    private final ProductServiceClient productServiceClient;
-    private final UserServiceClient userServiceClient;
-    int attempt = 0;
+    private final ProductService productService;
+    private final UserService userService;
 
-    @Retry(name = "orderRetry",fallbackMethod = "addToCartFallback")
-//    @CircuitBreaker(name = "orderBreaker",fallbackMethod = "addToCartFallback")
+
     @Transactional
     @Override
     public Boolean addToCart(String userId, CartItemDTO cartItemDTO) {
 
-        System.out.println("Attempt Count = " + attempt++);
-        ProductResponseDTO product = productServiceClient.getProduct(cartItemDTO.getProductId());
+        ProductResponseDTO product = productService.getProduct(cartItemDTO.getProductId());
 
         if(product.getStockQuantity()<cartItemDTO.getQuantity())
         {
             return Boolean.FALSE;
         }
 
-        UserResponseDTO user = userServiceClient.getUser(userId);
+        UserResponseDTO user = userService.getUser(userId);
 
         Cart cart = getUserCart(user.getId());
         CartItem cartItem = cartItemRepository.findByCartAndProductId(cart,cartItemDTO.getProductId());
@@ -68,18 +63,11 @@ public class CartServiceImpl implements CartService{
         return Boolean.TRUE;
     }
 
-
-    public Boolean addToCartFallback(String userId, CartItemDTO cartItemDTO,Exception e)
-    {
-        System.out.println("Fallback called");
-        return false;
-    }
-
     @Transactional(readOnly = true)
     @Override
     public CartDTO getCart(String userId) {
 
-        UserResponseDTO user = userServiceClient.getUser(userId);
+        UserResponseDTO user = userService.getUser(userId);
 
         Cart cart = getUserCart(user.getId());
 
@@ -93,7 +81,7 @@ public class CartServiceImpl implements CartService{
     @Override
     public Boolean updateCart(String userId, String productId, String operation) {
 
-        UserResponseDTO user = userServiceClient.getUser(userId);
+        UserResponseDTO user = userService.getUser(userId);
 
         Cart cart = getUserCart(user.getId());
         CartItem cartItem = cartItemRepository.findByCartAndProductId(cart,productId);
@@ -101,7 +89,7 @@ public class CartServiceImpl implements CartService{
         {
             return Boolean.FALSE;
         }
-        ProductResponseDTO product = productServiceClient.getProduct(productId);
+        ProductResponseDTO product = productService.getProduct(productId);
 
         int quantity = operation.equalsIgnoreCase("add")
                 ? 1
@@ -129,7 +117,7 @@ public class CartServiceImpl implements CartService{
     @Override
     public CartDTO deleteFromCart(String userId, String productId) {
 
-        UserResponseDTO user = userServiceClient.getUser(userId);
+        UserResponseDTO user = userService.getUser(userId);
 
         Cart cart = getUserCart(user.getId());
 
@@ -157,7 +145,7 @@ public class CartServiceImpl implements CartService{
         BigDecimal total = cart.getCartItems().stream()
                 .map( item ->
                 {
-                    ProductResponseDTO product = productServiceClient.getProduct(item.getProductId());
+                    ProductResponseDTO product = productService.getProduct(item.getProductId());
                     if(product!=null) return (product.getPrice().multiply(BigDecimal.ONE.subtract(product.getDiscount().divide(BigDecimal.valueOf(100)))))
                             .multiply(BigDecimal.valueOf(item.getQuantity()));
                     return BigDecimal.ZERO;

@@ -1,6 +1,7 @@
 package com.ecommerce.app.mapper;
 
 import com.ecommerce.app.model.Order;
+import com.ecommerce.app.payload.OrderEvent;
 import com.ecommerce.app.payload.OrderResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,4 +17,6 @@ public interface OrderMapper {
 
     List<OrderResponseDTO> toDTOList(List<Order> orders);
 
+    @Mapping(source = "items",target = "orderItems")
+    OrderEvent toOrderEvent(Order order);
 }

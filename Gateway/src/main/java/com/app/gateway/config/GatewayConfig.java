@@ -32,13 +32,17 @@ public class GatewayConfig {
                 .route("USERMODULE",r ->
                     r.path("/api/user/**","/api/address/**")
                             .filters(f -> f.circuitBreaker(config ->
-                                    config.setName("gatewayBreaker").setFallbackUri("forward:/fallback/USER")))
+                                    config.setName("gatewayBreaker").setFallbackUri("forward:/fallback/USER"))
+                                    .requestRateLimiter(config ->
+                                            config.setRateLimiter(redisRateLimiter()).setKeyResolver(hostNameKeyResolver())))
                             .uri("lb://USERMODULE")
                 )
                 .route("PRODUCTMODULE",r ->
                         r.path("/api/product/**","/api/category/**")
                                 .filters(f -> f.circuitBreaker(config ->
-                                        config.setName("gatewayBreaker").setFallbackUri("forward:/fallback/PRODUCT")))
+                                        config.setName("gatewayBreaker").setFallbackUri("forward:/fallback/PRODUCT"))
+                                        .requestRateLimiter(config ->
+                                                config.setRateLimiter(redisRateLimiter()).setKeyResolver(hostNameKeyResolver())))
                                 .uri("lb://PRODUCTMODULE")
                 )
                 .route("ORDERMODULE",r ->

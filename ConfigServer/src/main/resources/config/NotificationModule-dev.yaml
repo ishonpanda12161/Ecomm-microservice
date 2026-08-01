@@ -1,13 +1,5 @@
 #Spring
 spring:
-  #Database POSTGRES
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ecommerce
-    username: "postgres"
-    password: "0007"
-  jpa:
-    hibernate:
-      ddl-auto: update
     #MessageQueue
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
@@ -22,6 +14,16 @@ spring:
         - com.netflix.discovery.EurekaClient
         - com.netflix.discovery.DiscoveryClient
         - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+
+#Notification Queue and Exchange
+rabbitmq:
+  exchange:
+    name: ecomm.exchange
+  queue:
+    name: notification.queue
+  routing:
+    order: order.*
+
 #Logging
 logging:
   pattern:
@@ -30,17 +32,6 @@ logging:
     root: INFO
   file:
     name: Logs/${spring.application.name}.log
-
-
-#Actuator + Zipkin
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,busrefresh,refresh,prometheus
-  tracing:
-    sampling:
-      probability: 1.0
 
 #Eureka
 eureka:
@@ -59,4 +50,4 @@ eureka:
 
 #Server
 server:
-  port: 8083
+  port: 8085

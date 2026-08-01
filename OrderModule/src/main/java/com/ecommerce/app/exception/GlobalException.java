@@ -2,6 +2,7 @@ package com.ecommerce.app.exception;
 
 
 import com.ecommerce.app.payload.ErrorResponseDTO;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
+import javax.naming.ServiceUnavailableException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +20,13 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalException {
+
+    @ExceptionHandler({CallNotPermittedException.class, ResourceAccessException.class, ServiceUnavailableException.class, IllegalStateException.class})
+    public ResponseEntity<ErrorResponseDTO> serviceNotAvailable(Exception e)
+    {
+        ErrorResponseDTO response = new ErrorResponseDTO("Service.","Service is Down...",e.getMessage(),LocalDateTime.now());
+        return ResponseEntity.badRequest().body(response);
+    }
 
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<Map<String,Object>> clientException(HttpClientErrorException e)

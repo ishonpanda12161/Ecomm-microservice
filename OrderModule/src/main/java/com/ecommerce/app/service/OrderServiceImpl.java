@@ -1,9 +1,8 @@
 package com.ecommerce.app.service;
 
-import com.ecommerce.app.config.ProductServiceClient;
-import com.ecommerce.app.config.UserServiceClient;
+import com.ecommerce.app.config.HttpService.ProductService;
+import com.ecommerce.app.config.HttpService.UserService;
 import com.ecommerce.app.exception.APIException;
-import com.ecommerce.app.exception.ResourceNotFoundException;
 import com.ecommerce.app.mapper.OrderMapper;
 import com.ecommerce.app.model.*;
 import com.ecommerce.app.payload.OrderResponseDTO;
@@ -12,23 +11,40 @@ import com.ecommerce.app.payload.UserResponseDTO;
 import com.ecommerce.app.repository.CartRepository;
 import com.ecommerce.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
+    @Value("${rabbitmq.exchange.name}")
+    private String exchangeName;
+    @Value("${rabbitmq.key.created}")
+    private String createdKey;
+    @Value("${rabbitmq.key.cancelled}")
+    private String cancelledKey;
+    @Value("${rabbitmq.key.delivered}")
+    private String deliveredKey;
+    @Value("${rabbitmq.key.shipped}")
+    private String shippedKey;
+    @Value("${rabbitmq.key.confirmed}")
+    private String confirmedKey;
+
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CartRepository cartRepository;
-    private final ProductServiceClient productServiceClient;
-    private final UserServiceClient userServiceClient;
+    private final ProductService productService;
+    private final UserService userService;
+    private final RabbitTemplate rabbitTemplate;
 
     @Transactional
     @Override
@@ -41,16 +57,16 @@ public class OrderServiceImpl implements OrderService{
             throw new APIException("Cart is empty.","Empty", LocalDateTime.now());
         }
 
-        UserResponseDTO user = userServiceClient.getUser(userId);
+        UserResponseDTO user = userService.getUser(userId);
 
         List<OrderItem> orderItems = cartItems.stream()
                 .map(item ->
                 {
-                    ProductResponseDTO product = productServiceClient.getProduct(item.getProductId());
+                    ProductResponseDTO product = productService.getProduct(item.getProductId());
                     // N+1 optimize fetching product ^
                     BigDecimal totalPrice = (product.getPrice().multiply(BigDecimal.ONE.subtract(product.getDiscount().divide(BigDecimal.valueOf(100)))))
                             .multiply(BigDecimal.valueOf(item.getQuantity()));
-                    productServiceClient.updateProductQuantity(item.getProductId(),product.getStockQuantity()-item.getQuantity());
+                    productService.updateProductQuantity(item.getProductId(),product.getStockQuantity()-item.getQuantity());
                     return new OrderItem(product.getId(),item.getQuantity(),totalPrice);
                 }).toList();
 
@@ -64,9 +80,19 @@ public class OrderServiceImpl implements OrderService{
 
         Order savedOrder = orderRepository.saveAndFlush(order);
 
-        orderItems.forEach(item -> item.setOrder(savedOrder));
-        savedOrder.setItems(orderItems);
+        orderItems.forEach(item ->
+        {
+            item.setOrder(savedOrder);
+            savedOrder.getItems().add(item);
+        });
         cart.getCartItems().clear();
+
+        //publish event
+        rabbitTemplate.convertAndSend(
+                exchangeName,
+                createdKey,
+                orderMapper.toOrderEvent(savedOrder)
+        );
 
         return orderMapper.toDTO(savedOrder);
     }
@@ -80,9 +106,17 @@ public class OrderServiceImpl implements OrderService{
         {
             return Boolean.FALSE;
         }
-
+        // Re-Stock products
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
+
+        //publish event
+        rabbitTemplate.convertAndSend(
+                exchangeName,
+                cancelledKey,
+                orderMapper.toOrderEvent(order)
+        );
+
         return Boolean.TRUE;
     }
 
@@ -97,6 +131,23 @@ public class OrderServiceImpl implements OrderService{
 
         order.setStatus(status);
         orderRepository.save(order);
+
+        String key;
+
+        switch (status){
+            case DELIVERED -> key=deliveredKey;
+            case SHIPPED -> key=shippedKey;
+            case CONFIRMED -> key=confirmedKey;
+            case CANCELLED -> key=cancelledKey;
+            default -> key=confirmedKey;
+        }
+
+        //publish event
+        rabbitTemplate.convertAndSend(
+                exchangeName,
+                key,
+                orderMapper.toOrderEvent(order)
+        );
         return Boolean.TRUE;
     }
 

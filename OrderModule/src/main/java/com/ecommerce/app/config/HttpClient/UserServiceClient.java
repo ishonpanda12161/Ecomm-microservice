@@ -1,4 +1,4 @@
-package com.ecommerce.app.config;
+package com.ecommerce.app.config.HttpClient;
 
 import com.ecommerce.app.payload.UserResponseDTO;
 import org.springframework.web.bind.annotation.PathVariable;
