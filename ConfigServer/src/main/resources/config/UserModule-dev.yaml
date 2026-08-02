@@ -1,10 +1,9 @@
 #Spring
 spring:
   #Database -> MongoDB
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/userDB
-      database: userDB
+  mongodb:
+    uri: ${MONGODB_URL}
+    database: userDB
   #MessageQueue
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
@@ -22,6 +21,9 @@ spring:
 
 #Actuator + Zipkin
 management:
+  health:
+    mongodb:
+      enabled: false
   endpoints:
     web:
       exposure:
