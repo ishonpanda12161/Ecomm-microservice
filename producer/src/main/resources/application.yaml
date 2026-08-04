@@ -19,7 +19,7 @@ spring:
         binder:
           brokers: localhost:9092
 
-s
+
 
 #  kafka:
 #    producer:

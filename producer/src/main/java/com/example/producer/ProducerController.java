@@ -47,7 +47,7 @@ public class ProducerController {
         return () -> {
             int id = random.nextInt(50);
             RiderLocation riderLocation = new RiderLocation(String.valueOf(id),"12312.123123","9879.23","34i+23j-123k");
-            return MessageBuilder.withPayload(riderLocation).setHeader(KafkaHeaders.KEY,String.valueOf(id).getBytes()).setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.TEXT_PLAIN).build();
+            return MessageBuilder.withPayload(riderLocation).setHeader(KafkaHeaders.KEY,String.valueOf(id).getBytes()).build();
         };
     }
 
@@ -59,7 +59,7 @@ public class ProducerController {
             int id = random.nextInt(10);
             boolean status = random.nextBoolean();
             String res = "Status: "+status+" Rider ID: "+id;
-            return MessageBuilder.withPayload(res).setHeader(KafkaHeaders.KEY,String.valueOf(id).getBytes()).setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.TEXT_PLAIN).build();
+            return MessageBuilder.withPayload(res).setHeader(KafkaHeaders.KEY,String.valueOf(id).getBytes()).build();
         };
     }
 }
