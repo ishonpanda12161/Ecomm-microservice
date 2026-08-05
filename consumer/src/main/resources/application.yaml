@@ -12,11 +12,13 @@ spring:
 #        spring.json.value.default.type: com.example.consumer.RiderLocation
   cloud:
     function:
-      definition: processLocation
+      definition: processLocation;processStatus
     stream:
       bindings:
         processLocation-in-0:
           destination: riderEvent
+        processStatus-in-0:
+          destination: riderStatus
       kafka:
         binder:
           brokers: localhost:9092
