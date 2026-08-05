@@ -19,8 +19,6 @@ spring:
         binder:
           brokers: localhost:9092
 
-s
-
 #  kafka:
 #    producer:
 #      bootstrap-servers: localhost:9092
