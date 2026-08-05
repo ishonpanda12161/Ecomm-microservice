@@ -13,7 +13,7 @@ spring:
           content-type: application/json
 
         statusUpdate-out-0:
-          destination: riderEvent
+          destination: riderStatus
           content-type: text/plain
       kafka:
         binder:

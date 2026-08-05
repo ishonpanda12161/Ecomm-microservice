@@ -8,8 +8,14 @@ import org.springframework.context.annotation.Configuration;
 public class KafkaTopicConfig {
 
     @Bean
-    public NewTopic eventTopic()
+    public NewTopic riderEvent()
     {
         return new NewTopic("riderEvent",3,(short)1);
+    }
+
+    @Bean
+    public NewTopic riderStatus()
+    {
+        return new NewTopic("riderStatus",2,(short)1);
     }
 }

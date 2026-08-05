@@ -3,39 +3,12 @@ package com.example.producer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.KafkaHeaderMapper;
 import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.kafka.support.converter.KafkaMessageHeaders;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+
 import java.util.Random;
 import java.util.function.Supplier;
-
-//@RestController
-//@RequestMapping("/producer")
-//public class ProducerController {
-//
-//    private final KafkaTemplate<String,RiderLocation> kafkaTemplate;
-//
-//    public ProducerController(KafkaTemplate<String, RiderLocation> kafkaTemplate) {
-//        this.kafkaTemplate = kafkaTemplate;
-//    }
-//
-//    @PostMapping("/send")
-//    public String send()
-//    {
-//        kafkaTemplate.send("riderEvent",new RiderLocation("111","12312.123123","9879.23","34i+23j-123k"));
-//        return "sent";
-//    }
-//}
-
 
 @Configuration
 public class ProducerController {
