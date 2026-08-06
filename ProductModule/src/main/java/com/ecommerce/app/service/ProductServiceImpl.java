@@ -172,6 +172,7 @@ public class ProductServiceImpl implements ProductService{
         product.setActive(productRequestDTO.getActive());
         product.setPrice(productRequestDTO.getPrice());
         product.setStockQuantity(productRequestDTO.getStockQuantity());
+        product.setSellerId(productRequestDTO.getSellerId());
 
         return productMapper.toDTO(productRepository.save(product));
 
