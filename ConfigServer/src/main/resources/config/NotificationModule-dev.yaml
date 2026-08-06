@@ -14,15 +14,32 @@ spring:
         - com.netflix.discovery.EurekaClient
         - com.netflix.discovery.DiscoveryClient
         - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+    #Stream ->
+    function:
+      definition: orderEventConsumer
+    stream:
+      bindings:
+        orderEventConsumer-in-0:
+          destination: ecomm.exchange.order
+          group: notification
+#
+#      kafka:
+#        binder:
+#          brokers: localhost:9092
+      rabbit:
+        bindings:
+          orderEventConsumer-in-0:
+              consumer:
+                binding-routing-key: order.*
 
 #Notification Queue and Exchange
-rabbitmq:
-  exchange:
-    name: ecomm.exchange
-  queue:
-    name: notification.queue
-  routing:
-    order: order.*
+#rabbitmq:
+#  exchange:
+#    name: ecomm.exchange
+#  queue:
+#    name: notification.queue
+#  routing:
+#    order: order.*
 
 #Logging
 logging:

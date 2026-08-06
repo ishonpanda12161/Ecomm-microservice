@@ -23,10 +23,37 @@ spring:
         - com.netflix.discovery.DiscoveryClient
         - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
 
+  #Cloud Streams ->
+    stream:
+      bindings:
+        createOrder-out-0:
+          destination: ecomm.exchange.order
+          content-type: application/json
+        cancelOrder-out-0:
+          destination: ecomm.exchange.order
+          content-type: application/json
+        updateOrderStatus-out-0:
+          destination: ecomm.exchange.order
+          content-type: application/json
+#
+#      kafka:
+#        binder:
+#          brokers: localhost:9092
+      rabbit:
+        bindings:
+          createOrder-out-0:
+            producer:
+              routing-key-expression: "'order.created'"
+          cancelOrder-out-0:
+            producer:
+              routing-key-expression: "'order.cancelled'"
+          updateOrderStatus-out-0:
+            producer:
+              routing-key-expression: headers['target_key']
 #Order : Queue and Exchange
-rabbitmq:
-  exchange:
-    name: ecomm.exchange
+exchange:
+#  exchange:
+#    name: ecomm.exchange
   key:
     created: order.created
     cancelled: order.cancelled

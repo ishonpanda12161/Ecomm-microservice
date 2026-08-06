@@ -1,77 +1,43 @@
 package com.app.notificationmodule.config;
 
-import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
+//@Configuration
 public class RabbitMQConfiguration {
-
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeName;
-    @Value("${rabbitmq.queue.name}")
-    private String queueName;
-    @Value("${rabbitmq.routing.order}")
-    private String orderKey;
-    @Bean
-    Queue queue()
-    {
-        return QueueBuilder
-                .durable(queueName)
-                .build();
-    }
-
-    @Bean
-    TopicExchange exchange()
-    {
-        return ExchangeBuilder
-                .topicExchange(exchangeName)
-                .durable(true)
-                .build();
-    }
-
-    @Bean
-    Binding orderBinding()
-    {
-        return BindingBuilder
-                .bind(queue())
-                .to(exchange())
-                .with(orderKey);
-    }
-
-
-    @Bean
-    MessageConverter messageConverter()
-    {
-        return new JacksonJsonMessageConverter();
-    }
-
+//
+//    @Value("${rabbitmq.exchange.name}")
+//    private String exchangeName;
 //    @Value("${rabbitmq.queue.name}")
 //    private String queueName;
-//
+//    @Value("${rabbitmq.routing.order}")
+//    private String orderKey;
 //    @Bean
-//    public Queue queue()
+//    Queue queue()
 //    {
-//        return QueueBuilder.durable(queueName)
+//        return QueueBuilder
+//                .durable(queueName)
 //                .build();
 //    }
 //
 //    @Bean
-//    public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory)
+//    TopicExchange exchange()
 //    {
-//        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-//        rabbitAdmin.setAutoStartup(true);
-//        return rabbitAdmin;
+//        return ExchangeBuilder
+//                .topicExchange(exchangeName)
+//                .durable(true)
+//                .build();
 //    }
 //
 //    @Bean
-//    public MessageConverter messageConverter()
+//    Binding orderBinding()
+//    {
+//        return BindingBuilder
+//                .bind(queue())
+//                .to(exchange())
+//                .with(orderKey);
+//    }
+//
+//
+//    @Bean
+//    MessageConverter messageConverter()
 //    {
 //        return new JacksonJsonMessageConverter();
 //    }

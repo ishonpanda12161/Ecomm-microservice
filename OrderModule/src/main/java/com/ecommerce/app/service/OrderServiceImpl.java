@@ -3,6 +3,7 @@ package com.ecommerce.app.service;
 import com.ecommerce.app.config.HttpService.ProductService;
 import com.ecommerce.app.config.HttpService.UserService;
 import com.ecommerce.app.exception.APIException;
+import com.ecommerce.app.exception.ResourceNotFoundException;
 import com.ecommerce.app.mapper.OrderMapper;
 import com.ecommerce.app.model.*;
 import com.ecommerce.app.payload.OrderResponseDTO;
@@ -11,8 +12,9 @@ import com.ecommerce.app.payload.UserResponseDTO;
 import com.ecommerce.app.repository.CartRepository;
 import com.ecommerce.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,23 +22,22 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeName;
-    @Value("${rabbitmq.key.created}")
-    private String createdKey;
-    @Value("${rabbitmq.key.cancelled}")
-    private String cancelledKey;
-    @Value("${rabbitmq.key.delivered}")
+//    @Value("${exchange.exchange.name}")
+//    private String exchangeName;
+//    @Value("${exchange.key.created}")
+//    private String createdKey;
+//    @Value("${exchange.key.cancelled}")
+//    private String cancelledKey;
+    @Value("${exchange.key.delivered}")
     private String deliveredKey;
-    @Value("${rabbitmq.key.shipped}")
+    @Value("${exchange.key.shipped}")
     private String shippedKey;
-    @Value("${rabbitmq.key.confirmed}")
+    @Value("${exchange.key.confirmed}")
     private String confirmedKey;
 
     private final OrderRepository orderRepository;
@@ -44,7 +45,8 @@ public class OrderServiceImpl implements OrderService{
     private final CartRepository cartRepository;
     private final ProductService productService;
     private final UserService userService;
-    private final RabbitTemplate rabbitTemplate;
+    //private final RabbitTemplate rabbitTemplate;
+    private final StreamBridge streamBridge;
 
     @Transactional
     @Override
@@ -88,11 +90,13 @@ public class OrderServiceImpl implements OrderService{
         cart.getCartItems().clear();
 
         //publish event
-        rabbitTemplate.convertAndSend(
-                exchangeName,
-                createdKey,
-                orderMapper.toOrderEvent(savedOrder)
-        );
+//        rabbitTemplate.convertAndSend(
+//                exchangeName,
+//                createdKey,
+//                orderMapper.toOrderEvent(savedOrder)
+//        );
+
+        streamBridge.send("createOrder-out-0",orderMapper.toOrderEvent(savedOrder));
 
         return orderMapper.toDTO(savedOrder);
     }
@@ -111,11 +115,12 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(order);
 
         //publish event
-        rabbitTemplate.convertAndSend(
-                exchangeName,
-                cancelledKey,
-                orderMapper.toOrderEvent(order)
-        );
+//        rabbitTemplate.convertAndSend(
+//                exchangeName,
+//                cancelledKey,
+//                orderMapper.toOrderEvent(order)
+//        );
+        streamBridge.send("cancelOrder-out-0",orderMapper.toOrderEvent(order));
 
         return Boolean.TRUE;
     }
@@ -132,22 +137,27 @@ public class OrderServiceImpl implements OrderService{
         order.setStatus(status);
         orderRepository.save(order);
 
-        String key;
-
-        switch (status){
-            case DELIVERED -> key=deliveredKey;
-            case SHIPPED -> key=shippedKey;
-            case CONFIRMED -> key=confirmedKey;
-            case CANCELLED -> key=cancelledKey;
-            default -> key=confirmedKey;
-        }
+        String key = switch (status) {
+            case DELIVERED -> deliveredKey;
+            case SHIPPED -> shippedKey;
+            case CONFIRMED -> confirmedKey;
+            default -> throw new ResourceNotFoundException(
+                    "Routing Key",
+                    "Key",
+                    status.name(),
+                    LocalDateTime.now()
+            );
+        };
 
         //publish event
-        rabbitTemplate.convertAndSend(
-                exchangeName,
-                key,
-                orderMapper.toOrderEvent(order)
-        );
+//        rabbitTemplate.convertAndSend(
+//                exchangeName,
+//                key,
+//                orderMapper.toOrderEvent(order)
+//        );
+        streamBridge.send("updateOrderStatus-out-0",
+                MessageBuilder.withPayload(orderMapper.toOrderEvent(order)).setHeader("target_key",key).build());
+
         return Boolean.TRUE;
     }
 
