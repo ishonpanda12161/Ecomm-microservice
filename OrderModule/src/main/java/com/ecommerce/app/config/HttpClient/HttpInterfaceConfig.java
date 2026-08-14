@@ -89,5 +89,4 @@ public class HttpInterfaceConfig {
         return factory.createClient(UserServiceClient.class);
     }
 
-
 }

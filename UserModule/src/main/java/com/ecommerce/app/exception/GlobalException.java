@@ -6,8 +6,12 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,5 +58,22 @@ public class GlobalException {
     public ResponseEntity<String> resourceAlreadyExists(ResourceAlreadyExistsException e)
     {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(exception = {HttpMessageNotReadableException.class, MethodArgumentNotValidException.class})
+    public ResponseEntity<ErrorResponseDTO> messageException(Exception e)
+    {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("Validation",e.getMessage(),e.getCause(),LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<Map<String,Object>> clientException(HttpClientErrorException e)
+    {
+        Map<String,Object> response = new HashMap<>();
+        response.put("Message",e.getMessage());
+        response.put("TimeStamp",LocalDateTime.now());
+
+        return ResponseEntity.badRequest().body(response);
     }
 }

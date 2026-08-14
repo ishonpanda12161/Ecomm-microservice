@@ -24,6 +24,8 @@ public class User {
     @Id
     private String id;
 
+    private String keycloakId;
+
     @NotBlank(message = "FirstName cannot be blank.")
     @Size(min = 2,message = "FirstName contain at least 2 characters.")
     private String firstName;

@@ -2,6 +2,44 @@
 server:
   port: 8080
 
+#Keycloak
+keycloak:
+  clientId: 'oauth2-ecomm-pkce'
+#Gateway
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8443/realms/ecomm-app
+  data:
+    redis:
+      url: redis://default:a0Ea1uU3w3LLb28QUUFFzA6wGepDzsSs@redis-15753.crce276.ap-south-1-3.ec2.cloud.redislabs.com:15753
+#      host: localhost
+#      port: 6500
+  cloud:
+    refresh:
+      never-refreshable:
+        - com.netflix.discovery.EurekaClient
+        - com.netflix.discovery.DiscoveryClient
+        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#          - id: user-module
+#            uri: lb://USERMODULE
+#            predicates:
+#              - Path=/api/user/**,/api/address/**
+#          - id: product-module
+#            uri: lb://PRODUCTMODULE
+#            predicates:
+#              - Path=/api/category/**,/api/product/**
+#          - id: order-module
+#            uri: lb://ORDERMODULE
+#            predicates:
+#              - Path=/api/cart/**,/api/order/**
+
 #Actuator + Zipkin
 management:
   endpoint:
@@ -41,35 +79,6 @@ logging:
     root: INFO
   file:
     name: Logs/${spring.application.name}.log
-
-#Gateway
-spring:
-  data:
-    redis:
-      host: localhost
-      port: 6500
-  cloud:
-    refresh:
-      never-refreshable:
-        - com.netflix.discovery.EurekaClient
-        - com.netflix.discovery.DiscoveryClient
-        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
-#    gateway:
-#      server:
-#        webflux:
-#          routes:
-#          - id: user-module
-#            uri: lb://USERMODULE
-#            predicates:
-#              - Path=/api/user/**,/api/address/**
-#          - id: product-module
-#            uri: lb://PRODUCTMODULE
-#            predicates:
-#              - Path=/api/category/**,/api/product/**
-#          - id: order-module
-#            uri: lb://ORDERMODULE
-#            predicates:
-#              - Path=/api/cart/**,/api/order/**
 
 #Circuit Breaker
 resilience4j:

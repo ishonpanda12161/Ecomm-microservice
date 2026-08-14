@@ -1,5 +1,6 @@
 package com.ecommerce.app.service;
 
+import com.ecommerce.app.config.HttpService.KeycloakAdminService;
 import com.ecommerce.app.exception.ResourceAlreadyExistsException;
 import com.ecommerce.app.exception.ResourceNotFoundException;
 import com.ecommerce.app.mapper.AddressMapper;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService{
     private final UserMapper userMapper;
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
+    private final KeycloakAdminService keycloakAdminService;
 
     @Override
     public List<UserResponseDTO> fetchAllUser() {
@@ -80,6 +82,13 @@ public class UserServiceImpl implements UserService{
             throw new ResourceAlreadyExistsException("User","Username",userRequestDTO.getUsername(),LocalDateTime.now());
         }
         User user = userMapper.toEntity(userRequestDTO);
+
+        String token = keycloakAdminService.getAccessToken();
+        String keycloakUserId = keycloakAdminService.createUser(token,userRequestDTO);
+        user.setKeycloakId(keycloakUserId);
+
+        keycloakAdminService.assignClientRoleToUser(userRequestDTO.getUsername(),"USER",keycloakUserId);
+
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }

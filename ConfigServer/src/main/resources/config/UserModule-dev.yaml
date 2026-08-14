@@ -19,6 +19,14 @@ spring:
         - com.netflix.discovery.DiscoveryClient
         - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
 
+#Keycloak access token
+keycloak:
+  uri: http://localhost:8443
+  adminUsername: ecomm-app-admin
+  adminPassword: admin
+  realm: ecomm-app
+  clientId: admin-cli
+  client-uid: 662778f6-9ea4-4e6e-94c3-85d989eccdce
 #Actuator + Zipkin
 management:
   health:
