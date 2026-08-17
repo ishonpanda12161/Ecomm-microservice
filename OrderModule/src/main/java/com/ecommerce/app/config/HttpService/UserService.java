@@ -18,21 +18,17 @@ public class UserService{
 
     private final UserServiceClient userServiceClient;
 
-
-//    @Retry(name = "userRetry",fallbackMethod = "getUserFallback")
-//    @CircuitBreaker(name = "userBreaker")
-    @CircuitBreaker(name = "userBreaker")
-    @Retry(name = "userRetry")
+    @CircuitBreaker(name = "userBreaker",fallbackMethod = "getUserFallback")
     public UserResponseDTO getUser(String id) {
         return userServiceClient.getUser(id);
     }
 
-//    public UserResponseDTO getUserFallback(String id,Throwable throwable) {
-//        log.error("UserModule call failed for ID {}: {}", id, throwable.getMessage());
-//        throw new APIException(
-//                "Cannot get User, User service is unavailable",
-//                "USER service down",
-//                LocalDateTime.now()
-//        );
-//    }
+    public UserResponseDTO getUserFallback(String id,Throwable throwable) {
+        log.error("UserModule call failed for ID {}: {}", id, throwable.getMessage());
+        throw new APIException(
+                "Cannot get User, User service is unavailable",
+                "USER service down",
+                LocalDateTime.now()
+        );
+    }
 }

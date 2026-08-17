@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProductService {
 
@@ -32,5 +33,10 @@ public interface ProductService {
     ProductResponseDTO getProductById(String id);
 
     @Transactional
-    void updateProductQuantity(String id, Integer quantity);
+    void decreaseProductQuantity(String id, Integer quantity);
+
+    @Transactional
+    void increaseProductQuantity(String id, Integer quantity);
+
+    List<ProductResponseDTO> getBatchProducts(Set<String> productIds);
 }

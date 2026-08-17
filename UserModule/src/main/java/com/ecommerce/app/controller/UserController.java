@@ -1,7 +1,9 @@
 package com.ecommerce.app.controller;
 
+import com.ecommerce.app.config.AppConfig;
 import com.ecommerce.app.payload.UserRequestDTO;
 import com.ecommerce.app.payload.UserResponseDTO;
+import com.ecommerce.app.payload.UserSearchResponseDTO;
 import com.ecommerce.app.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        return ResponseEntity.ok().body(userService.fetchAllUser());
+    public ResponseEntity<UserSearchResponseDTO> getAllUsers(
+            @RequestParam(name = "pageNum",defaultValue = AppConfig.PAGE_NUMBER,required = false) Integer pageNum,
+            @RequestParam(name = "pageSize",defaultValue = AppConfig.PAGE_SIZE,required = false) Integer pageSize,
+            @RequestParam(name = "sortBy",defaultValue = AppConfig.SORT_USERS_BY,required = false) String sortBy,
+            @RequestParam(name = "sortDir",defaultValue = AppConfig.SORT_DIR,required = false) String sortDir
+    ) {
+        return ResponseEntity.ok().body(userService.fetchAllUser(pageNum,pageSize,sortBy,sortDir));
     }
 
     @GetMapping("/{id}")

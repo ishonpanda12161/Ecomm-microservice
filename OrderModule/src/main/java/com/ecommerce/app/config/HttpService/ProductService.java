@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import javax.naming.ServiceUnavailableException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -27,10 +29,31 @@ public class ProductService {
         return productServiceClient.getProduct(id);
     }
 
-    @Retry(name = "productRetry",fallbackMethod = "updateQuantityFallback")
     @CircuitBreaker(name = "productBreaker")
-    public void updateProductQuantity(String id, Integer quantity) {
-        productServiceClient.updateProductQuantity(id,quantity);
+    @Retry(name = "productRetry")
+    public List<ProductResponseDTO> getBatch(Set<String> productIds)
+    {
+        return productServiceClient.getBatch(productIds);
+    }
+
+    @CircuitBreaker(name = "productBreaker",fallbackMethod = "stockUpdateFallback")
+    public void decreaseProductQuantity(String id, Integer quantity) {
+        productServiceClient.decreaseProductQuantity(id,quantity);
+    }
+
+    @CircuitBreaker(name = "productBreaker",fallbackMethod = "stockUpdateFallback")
+    public void increaseProductQuantity(String id, Integer quantity) {
+        productServiceClient.increaseProductQuantity(id,quantity);
+    }
+
+    public void stockUpdateFallback(String id,Integer quantity)
+    {
+        log.error("Stock Update in ProductModule failed for ID {}", id);
+        throw new APIException(
+                "Cannot udpate stock, Product service is unavailable",
+                "PRODUCT service down",
+                LocalDateTime.now()
+        );
     }
 
     public void updateQuantityFallback(String id,Integer quantity,Throwable throwable)  {
@@ -42,12 +65,5 @@ public class ProductService {
         );
     }
 
-//    public ProductResponseDTO getProductFallback(String id,Throwable throwable){
-//        log.error("ProductModule call failed for ID {}: {}", id, throwable.getMessage());
-//        throw new APIException(
-//                "Cannot get product, Product service is unavailable",
-//                "PRODUCT service down",
-//                LocalDateTime.now()
-//        );
-//    }
+
 }

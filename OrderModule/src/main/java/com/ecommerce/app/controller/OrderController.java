@@ -20,17 +20,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/message")
-    @RateLimiter(name = "orderRate",fallbackMethod = "fallbackMethod")
-    public String mesasge()
-    {
-        return "Pinging server...";
-    }
-
-    private String fallbackMethod()
-    {
-        return "Request Limit reached";
-    }
     @GetMapping()
     public ResponseEntity<List<OrderResponseDTO>> getUserOrders(
             @RequestHeader("USER_ID") String userId

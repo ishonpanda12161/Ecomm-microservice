@@ -6,6 +6,10 @@ server:
 keycloak:
   clientId: 'oauth2-ecomm-pkce'
 #Gateway
+gateway:
+  ratelimit:
+    replenish-rate: 100
+    burst-capacity: 250
 spring:
   security:
     oauth2:

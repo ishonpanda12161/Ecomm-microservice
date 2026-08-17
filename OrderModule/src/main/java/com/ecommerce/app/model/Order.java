@@ -38,4 +38,7 @@ public class Order {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Version
+    private Long version;
+
 }

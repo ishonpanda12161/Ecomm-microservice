@@ -48,7 +48,7 @@ public class CartController {
             @PathVariable String operation
     )
     {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.updateCart(userId,productId,operation));
+        return ResponseEntity.ok().body(cartService.updateCart(userId,productId,operation));
     }
 
     @DeleteMapping("/{productId}")

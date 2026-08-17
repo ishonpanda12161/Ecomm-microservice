@@ -38,9 +38,9 @@ public class User {
     @Size(min = 3,message = "Username Must contain at least 3 characters.")
     private String username;
 
-    @NotBlank(message = "Password cannot be blank.")
-    @Size(min = 3,message = "Password Must contain at least 3 characters.")
-    private String password;
+//    @NotBlank(message = "Password cannot be blank.")
+//    @Size(min = 3,message = "Password Must contain at least 3 characters.")
+//    private String password;
 
     @Email
     @NotBlank(message = "Email cannot be blank.")

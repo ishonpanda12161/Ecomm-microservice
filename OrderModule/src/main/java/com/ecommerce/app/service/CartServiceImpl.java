@@ -18,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +33,6 @@ public class CartServiceImpl implements CartService{
     private final CartMapper cartMapper;
     private final ProductService productService;
     private final UserService userService;
-
 
     @Transactional
     @Override
@@ -142,10 +145,15 @@ public class CartServiceImpl implements CartService{
 
     private BigDecimal calculateTotalPrice(Cart cart)
     {
+
+        Set<String> productIds = cart.getCartItems().stream().map(CartItem::getId).collect(Collectors.toSet());
+        List<ProductResponseDTO> productsList = productService.getBatch(productIds);
+        Map<String,ProductResponseDTO> products = productsList.stream().collect(Collectors.toMap(ProductResponseDTO::getId,p->p));
+
         BigDecimal total = cart.getCartItems().stream()
                 .map( item ->
                 {
-                    ProductResponseDTO product = productService.getProduct(item.getProductId());
+                    ProductResponseDTO product = products.get(item.getProductId());
                     if(product!=null) return (product.getPrice().multiply(BigDecimal.ONE.subtract(product.getDiscount().divide(BigDecimal.valueOf(100)))))
                             .multiply(BigDecimal.valueOf(item.getQuantity()));
                     return BigDecimal.ZERO;

@@ -10,9 +10,14 @@ import com.ecommerce.app.model.User;
 import com.ecommerce.app.payload.AddressDTO;
 import com.ecommerce.app.payload.UserRequestDTO;
 import com.ecommerce.app.payload.UserResponseDTO;
+import com.ecommerce.app.payload.UserSearchResponseDTO;
 import com.ecommerce.app.repository.AddressRepository;
 import com.ecommerce.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
@@ -31,17 +36,21 @@ public class UserServiceImpl implements UserService{
     private final KeycloakAdminService keycloakAdminService;
 
     @Override
-    public List<UserResponseDTO> fetchAllUser() {
-        List<User> users = userRepository.findAll();
+    public UserSearchResponseDTO fetchAllUser(Integer pageNum, Integer pageSize, String sortBy, String sortDir) {
 
-        //N+1 issue removed
+        Sort sortByAndOrder = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageRequest = PageRequest.of(pageNum,pageSize,sortByAndOrder);
+        Page<User> users = userRepository.findAll(pageRequest);
+
         List<String> userIds = users.stream().map(
                 User::getId
         ).toList();
 
         List<Address> addresses = addressRepository.findByUserIdIn(userIds);
 
-        //O(n*m) filtering -> O(m+n)
 
         Map<String,List<Address>> userAddress =  addresses.stream()
                 .collect(Collectors.groupingBy(Address::getUserId));
@@ -55,7 +64,15 @@ public class UserServiceImpl implements UserService{
 
                 }).toList();
 
-        return userResponseDTOS;
+        UserSearchResponseDTO response = new UserSearchResponseDTO();
+        response.setUserResponseDTOS(userResponseDTOS);
+        response.setLastPage(users.isLast());
+        response.setPageNum(users.getNumber());
+        response.setPageSize(users.getSize());
+        response.setTotalElements(users.getTotalElements());
+        response.setTotalPages(users.getTotalPages());
+
+        return response;
 
     }
 
@@ -101,7 +118,6 @@ public class UserServiceImpl implements UserService{
         user.setFirstName(userRequestDTO.getFirstName());
         user.setLastName(userRequestDTO.getLastName());
         user.setUsername(userRequestDTO.getUsername());
-        user.setPassword(userRequestDTO.getPassword());
         user.setEmail(userRequestDTO.getEmail());
         user.setPhone(userRequestDTO.getPhone());
         user.setUserRole(userRequestDTO.getUserRole());
@@ -117,7 +133,7 @@ public class UserServiceImpl implements UserService{
         List<Address> addresses = addressRepository.findByUserId(id);
         addressRepository.deleteAll(addresses);
         userRepository.delete(user);
-
+        // ADD: will add keycloak delete user later.
         return userMapper.toDto(user);
     }
 

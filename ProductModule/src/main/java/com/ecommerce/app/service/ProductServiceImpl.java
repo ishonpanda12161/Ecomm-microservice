@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -129,11 +131,40 @@ public class ProductServiceImpl implements ProductService{
 
     @Transactional
     @Override
-    public void updateProductQuantity(String id, Integer quantity) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Product","ProductId",id,LocalDateTime.now()));
-        product.setStockQuantity(quantity);
-        productRepository.save(product);
+    public void decreaseProductQuantity(String id, Integer quantity) {
+
+        if(quantity<=0)
+        {
+            throw new APIException("Quantity must be Positive.","Product Quantity",LocalDateTime.now());
+        }
+        if(productRepository.decreaseStock(id,quantity)==0)
+        {
+            throw new APIException("Insufficient Stock","OUT OF STOCK",LocalDateTime.now());
+        }
+    }
+
+    @Override
+    public void increaseProductQuantity(String id, Integer quantity) {
+
+        if(quantity<=0)
+        {
+            throw new APIException("Quantity must be Positive.","Product Quantity",LocalDateTime.now());
+        }
+        if(productRepository.increaseStock(id,quantity)==0)
+        {
+            throw new APIException("Cannot Restore Stock","Restore Stock",LocalDateTime.now());
+        }
+    }
+
+    @Override
+    public List<ProductResponseDTO> getBatchProducts(Set<String> productIds) {
+        List<Product> products = new ArrayList<>();
+        products = productRepository.findAllById(productIds);
+        if(products.isEmpty())
+        {
+            throw new APIException("Products Stock","OUT OF STOCK",LocalDateTime.now());
+        }
+        return productMapper.toDTOList(products);
     }
 
 

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +28,14 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts()
     {
         return ResponseEntity.ok().body(productService.getAllProducts());
+    }
+
+    @PostMapping("/batch")
+    public ResponseEntity<List<ProductResponseDTO>> getBatchProducts(
+            @RequestBody Set<String> productIds
+    )
+    {
+        return ResponseEntity.ok().body(productService.getBatchProducts(productIds));
     }
 
     @GetMapping("/{id}")
@@ -87,16 +96,26 @@ public class ProductController {
             @PathVariable String id
     )
     {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.updateProduct(productRequestDTO,id));
+        return ResponseEntity.ok().body(productService.updateProduct(productRequestDTO,id));
     }
 
-    @PutMapping("/{id}/{quantity}")
-    public ResponseEntity<Void> updateProductQuantity(
+    @PutMapping("/dec/{id}/{quantity}")
+    public ResponseEntity<Void> decreaseProductQuantity(
             @PathVariable Integer quantity,
             @PathVariable String id
     )
     {
-        productService.updateProductQuantity(id,quantity);
+        productService.decreaseProductQuantity(id,quantity);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/inc/{id}/{quantity}")
+    public ResponseEntity<Void> increaseProductQuantity(
+            @PathVariable Integer quantity,
+            @PathVariable String id
+    )
+    {
+        productService.increaseProductQuantity(id,quantity);
         return ResponseEntity.noContent().build();
     }
 

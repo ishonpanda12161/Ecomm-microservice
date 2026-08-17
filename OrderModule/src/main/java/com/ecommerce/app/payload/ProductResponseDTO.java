@@ -1,10 +1,12 @@
 package com.ecommerce.app.payload;
 
 import lombok.Data;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
 @Data
+@Getter
 public class ProductResponseDTO {
 
     private String id;

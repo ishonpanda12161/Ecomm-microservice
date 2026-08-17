@@ -40,6 +40,10 @@ public class CartItem {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Version
+    private Long version;
+
+
     public CartItem(@NotBlank(message = "Product Id cannot be blank.") String productId, @Positive @NotNull(message = "Quantity Cannot be null.") Integer quantity) {
         this.productId = productId;
         this.quantity =  quantity;

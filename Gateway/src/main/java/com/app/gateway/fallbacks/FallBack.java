@@ -22,6 +22,7 @@ public class FallBack {
         map.put("status",HttpStatus.SERVICE_UNAVAILABLE);
         map.put("message","Service temporarily unavailable");
         map.put("service",service);
+        map.put("request",request.getPath());
         map.put("timestamp", LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(map);
     }

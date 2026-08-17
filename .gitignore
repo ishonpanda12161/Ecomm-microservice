@@ -1,7 +1,8 @@
-.idea/
-Logs/
-Logging/loki/.data/
-Logging/prometheus-metrics/.data
-Zipkin/
+# Local Codex audit notes
+codex/
 .env
 env
+Logs/
+docker-compose.yml
+.idea
+Zipkin/

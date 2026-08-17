@@ -8,7 +8,6 @@ import com.ecommerce.app.mapper.OrderMapper;
 import com.ecommerce.app.model.*;
 import com.ecommerce.app.payload.OrderResponseDTO;
 import com.ecommerce.app.payload.ProductResponseDTO;
-import com.ecommerce.app.payload.UserResponseDTO;
 import com.ecommerce.app.repository.CartRepository;
 import com.ecommerce.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +16,11 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +47,7 @@ public class OrderServiceImpl implements OrderService{
     //private final RabbitTemplate rabbitTemplate;
     private final StreamBridge streamBridge;
 
+    private List<OrderStatus> cancellableStatus = List.of(OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.CREATED);
     @Transactional
     @Override
     public OrderResponseDTO createOrder(String userId) {
@@ -59,16 +59,17 @@ public class OrderServiceImpl implements OrderService{
             throw new APIException("Cart is empty.","Empty", LocalDateTime.now());
         }
 
-        UserResponseDTO user = userService.getUser(userId);
+        Set<String> productIds = cart.getCartItems().stream().map(CartItem::getProductId).collect(Collectors.toSet());
+        List<ProductResponseDTO> productResponseDTOS = productService.getBatch(productIds);
+        Map<String,ProductResponseDTO> productMap = productResponseDTOS.stream().collect(Collectors.toMap(ProductResponseDTO::getId,product -> product));
 
         List<OrderItem> orderItems = cartItems.stream()
                 .map(item ->
                 {
-                    ProductResponseDTO product = productService.getProduct(item.getProductId());
-                    // N+1 optimize fetching product ^
+                    ProductResponseDTO product = productMap.get(item.getProductId());
                     BigDecimal totalPrice = (product.getPrice().multiply(BigDecimal.ONE.subtract(product.getDiscount().divide(BigDecimal.valueOf(100)))))
                             .multiply(BigDecimal.valueOf(item.getQuantity()));
-                    productService.updateProductQuantity(item.getProductId(),product.getStockQuantity()-item.getQuantity());
+                    productService.decreaseProductQuantity(item.getProductId(),item.getQuantity());
                     return new OrderItem(product.getId(),item.getQuantity(),totalPrice);
                 }).toList();
 
@@ -110,16 +111,24 @@ public class OrderServiceImpl implements OrderService{
         {
             return Boolean.FALSE;
         }
-        // Re-Stock products
-        order.setStatus(OrderStatus.CANCELLED);
-        orderRepository.save(order);
 
-        //publish event
-//        rabbitTemplate.convertAndSend(
-//                exchangeName,
-//                cancelledKey,
-//                orderMapper.toOrderEvent(order)
-//        );
+        if(!cancellableStatus.contains(order.getStatus()))
+        {
+            throw new APIException("Couldn't cancel order","ORDER cancellation",LocalDateTime.now());
+        }
+
+        int update = orderRepository.claimCancellation(orderId,userId,OrderStatus.CANCELLED,cancellableStatus,order.getVersion());
+        if(update==0)
+        {
+            throw new APIException("Couldn't cancel order","ORDER cancellation",LocalDateTime.now());
+        }
+
+        order.getItems().forEach(orderItem -> {
+            productService.increaseProductQuantity(orderItem.getProductId(),orderItem.getQuantity());
+        });
+
+        order = orderRepository.findByIdAndUserId(orderId,userId);
+
         streamBridge.send("cancelOrder-out-0",orderMapper.toOrderEvent(order));
 
         return Boolean.TRUE;

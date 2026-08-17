@@ -3,7 +3,6 @@ package com.app.notificationmodule.consumer;
 import com.app.notificationmodule.payload.OrderEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-
 import java.util.function.Consumer;
 
 @Service
