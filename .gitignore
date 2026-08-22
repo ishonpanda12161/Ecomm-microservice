@@ -6,3 +6,4 @@ Logs/
 docker-compose.yml
 .idea
 Zipkin/
+ConfigServer/src/main/resources/config
