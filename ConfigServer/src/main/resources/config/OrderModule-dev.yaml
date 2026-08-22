@@ -1,5 +1,11 @@
 #Spring
 spring:
+  #Oauth2 - Keycloak
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_JWT_ISSUER}
   #Database POSTGRES
   datasource:
     url: ${POSTGRES_URL:jdbc:postgresql}
@@ -29,27 +35,45 @@ spring:
         createOrder-out-0:
           destination: ecomm.exchange.order
           content-type: application/json
+          binder: kafka
         cancelOrder-out-0:
           destination: ecomm.exchange.order
           content-type: application/json
+          binder: kafka
         updateOrderStatus-out-0:
           destination: ecomm.exchange.order
           content-type: application/json
+          binder: kafka
 #
 #      kafka:
 #        binder:
 #          brokers: localhost:9092
-      rabbit:
-        bindings:
-          createOrder-out-0:
-            producer:
-              routing-key-expression: "'order.created'"
-          cancelOrder-out-0:
-            producer:
-              routing-key-expression: "'order.cancelled'"
-          updateOrderStatus-out-0:
-            producer:
-              routing-key-expression: headers['target_key']
+      kafka:
+        binder:
+          brokers: ecomm-kafka-ishon.i.aivencloud.com:13199
+          jaas:
+            loginModule: org.apache.kafka.common.security.scram.ScramLoginModule
+            controlFlag: required
+            options:
+              username: "avnadmin"
+              password: "AVNS_7LApTBG7qsioA-B1rW-"
+          configuration:
+            security.protocol: SASL_SSL
+            sasl.mechanism: SCRAM-SHA-256
+            ssl.truststore.location: 'C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\NotificationModule\src\main\resources\ca.pem'
+            ssl.truststore.type: 'PEM'
+
+#      rabbit:
+#        bindings:
+#          createOrder-out-0:
+#            producer:
+#              routing-key-expression: "'order.created'"
+#          cancelOrder-out-0:
+#            producer:
+#              routing-key-expression: "'order.cancelled'"
+#          updateOrderStatus-out-0:
+#            producer:
+#              routing-key-expression: headers['target_key']
 #Order : Queue and Exchange
 exchange:
 #  exchange:
@@ -94,11 +118,12 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL}
+    registry-fetch-interval-seconds: 5
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
-    hostname: localhost
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
     instanceId: ${spring.application.name}:${server.port}
 
 #CircuitBreaker
@@ -108,8 +133,8 @@ resilience4j:
       #Breaker for Product
       productBreaker:
         register-health-indicator: true
-        sliding-window-size: 3
-        minimum-number-of-calls: 5
+        sliding-window-size: 10
+        minimum-number-of-calls: 10
         permitted-number-of-calls-in-half-open-state: 2
         wait-duration-in-open-state: 10s
         failure-rate-threshold: 50
@@ -121,7 +146,7 @@ resilience4j:
       #Breaker for User
       userBreaker:
         register-health-indicator: true
-        sliding-window-size: 3
+        sliding-window-size: 5
         minimum-number-of-calls: 5
         permitted-number-of-calls-in-half-open-state: 2
         wait-duration-in-open-state: 10s

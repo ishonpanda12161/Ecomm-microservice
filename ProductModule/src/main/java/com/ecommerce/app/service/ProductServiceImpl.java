@@ -158,11 +158,10 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<ProductResponseDTO> getBatchProducts(Set<String> productIds) {
-        List<Product> products = new ArrayList<>();
-        products = productRepository.findAllById(productIds);
-        if(products.isEmpty())
+        List<Product> products = productRepository.findAllById(productIds);
+        if( products==null || products.isEmpty())
         {
-            throw new APIException("Products Stock","OUT OF STOCK",LocalDateTime.now());
+            return List.of();
         }
         return productMapper.toDTOList(products);
     }

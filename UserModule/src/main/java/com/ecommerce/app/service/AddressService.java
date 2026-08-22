@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface AddressService {
-    Address addAddress(String userId, @Valid AddressDTO addressDTO);
+    Address addAddress(String keycloakId,@Valid AddressDTO addressDTO);
 
     @Transactional(readOnly = true)
-    List<AddressDTO> getAllAddress(String userId);
+    List<AddressDTO> getAllAddress(String keycloakId);
 
     @Transactional
     Address updateAddress(String addressId, @Valid AddressDTO addressDTO);

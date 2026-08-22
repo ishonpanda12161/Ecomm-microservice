@@ -8,14 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CartService {
 
     @Transactional
-    Boolean addToCart(String userId, @Valid CartItemDTO cartItemDTO);
+    Boolean addToCart(String keycloakId, @Valid CartItemDTO cartItemDTO);
 
     @Transactional(readOnly = true)
-    CartDTO getCart(String userId);
+    CartDTO getCart(String keycloakId);
 
     @Transactional
-    Boolean updateCart(String userId, String productId, String operation);
+    Boolean updateCart(String keycloakId, String productId, String operation);
 
     @Transactional
-    CartDTO deleteFromCart(String userId, String productId);
+    CartDTO deleteFromCart(String keycloakId, String productId);
 }

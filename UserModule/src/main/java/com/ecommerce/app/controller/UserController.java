@@ -9,6 +9,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<UserSearchResponseDTO> getAllUsers(
             @RequestParam(name = "pageNum",defaultValue = AppConfig.PAGE_NUMBER,required = false) Integer pageNum,
@@ -35,20 +39,33 @@ public class UserController {
         return ResponseEntity.ok().body(userService.fetchUser(id));
     }
 
+    @GetMapping("/keycloak/{keycloakId}")
+    public ResponseEntity<UserResponseDTO> getUserByKeycloakId(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable String keycloakId
+    ) {
+        if(jwt.getSubject().compareTo(keycloakId)<0)
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return ResponseEntity.ok().body(userService.fetchUserByKeycloakId(keycloakId));
+    }
+
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequestDTO));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable String id,
-                                             @RequestBody @Valid UserRequestDTO userRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(id, userRequestDTO));
+    @PutMapping
+    public ResponseEntity<UserResponseDTO> updateUser(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody @Valid UserRequestDTO userRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(jwt.getSubject(), userRequestDTO));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-        userService.deleteUser(id);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal Jwt jwt) {
+        userService.deleteUser(jwt.getSubject());
         return ResponseEntity.noContent().build();
     }
 

@@ -19,12 +19,12 @@ public class UserService{
     private final UserServiceClient userServiceClient;
 
     @CircuitBreaker(name = "userBreaker",fallbackMethod = "getUserFallback")
-    public UserResponseDTO getUser(String id) {
-        return userServiceClient.getUser(id);
+    public UserResponseDTO getUserByKeycloakId(String keycloakId) {
+        return userServiceClient.getUser(keycloakId);
     }
 
-    public UserResponseDTO getUserFallback(String id,Throwable throwable) {
-        log.error("UserModule call failed for ID {}: {}", id, throwable.getMessage());
+    public UserResponseDTO getUserFallback(String keycloakId,Throwable throwable) {
+        log.error("UserModule call failed for ID {}: {}", keycloakId, throwable.getMessage());
         throw new APIException(
                 "Cannot get User, User service is unavailable",
                 "USER service down",

@@ -16,6 +16,7 @@ public class OrderEvent {
 
     private String id;
     private String userId;
+    private String email;
     private BigDecimal totalAmount;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

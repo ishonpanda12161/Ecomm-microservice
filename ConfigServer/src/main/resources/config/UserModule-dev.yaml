@@ -1,5 +1,11 @@
 #Spring
 spring:
+  #Oauth2 - Keycloak
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_JWT_ISSUER}
   #Database -> MongoDB
   mongodb:
     uri: ${MONGODB_URL}
@@ -21,12 +27,14 @@ spring:
 
 #Keycloak access token
 keycloak:
-  uri: http://localhost:8443
-  adminUsername: ecomm-app-admin
-  adminPassword: admin
-  realm: ecomm-app
-  clientId: admin-cli
-  client-uid: 662778f6-9ea4-4e6e-94c3-85d989eccdce
+  uri: ${KEYCLOAK_URI}
+#  adminUsername: ${KEYCLOAK_USERNAME}
+#  adminPassword: ${KEYCLOAK_PASSWORD}
+  realm: ${KEYCLOAK_REALM}
+  client-uid: ${KEYCLOAK_CLIENT_UID}
+  manage:
+    clientId: ${KEYCLOAK_CLIENT_ID}
+    secret: ${KEYCLOAK_CLIENT_SECRET}
 #Actuator + Zipkin
 management:
   health:
@@ -48,11 +56,12 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL}
+    registry-fetch-interval-seconds: 5
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
-    hostname: localhost
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
     instanceId: ${spring.application.name}:${server.port}
 
 #Logging

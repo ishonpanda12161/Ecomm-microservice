@@ -16,7 +16,10 @@ public interface UserService {
 
     UserResponseDTO createUser(UserRequestDTO userRequestDTO);
 
-    UserResponseDTO updateUser(String id, UserRequestDTO userRequestDTO);
+    UserResponseDTO updateUser(String keycloakId, UserRequestDTO userRequestDTO);
 
-    UserResponseDTO deleteUser(String id);
+    UserResponseDTO deleteUser(String keycloakId);
+
+    UserResponseDTO fetchUserByKeycloakId(String keycloakId);
+
 }

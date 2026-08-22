@@ -22,16 +22,47 @@ spring:
         orderEventConsumer-in-0:
           destination: ecomm.exchange.order
           group: notification
+          binder: kafka
 #
 #      kafka:
 #        binder:
 #          brokers: localhost:9092
-      rabbit:
-        bindings:
-          orderEventConsumer-in-0:
-              consumer:
-                binding-routing-key: order.*
+      kafka:
+        binder:
+          brokers: ecomm-kafka-ishon.i.aivencloud.com:13199
+          jaas:
+            loginModule: org.apache.kafka.common.security.scram.ScramLoginModule
+            controlFlag: required
+            options:
+              username: "avnadmin"
+              password: "AVNS_7LApTBG7qsioA-B1rW-"
+          configuration:
+            security.protocol: SASL_SSL
+            sasl.mechanism: SCRAM-SHA-256
+            ssl.truststore.location: 'ca.pem'
+            ssl.truststore.type: 'PEM'
+#      rabbit:
+#        bindings:
+#          orderEventConsumer-in-0:
+#              consumer:
+#                binding-routing-key: order.*
 
+  #MAIL
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 #Notification Queue and Exchange
 #rabbitmq:
 #  exchange:
@@ -58,11 +89,12 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL}
+    registry-fetch-interval-seconds: 5
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
-    hostname: localhost
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
     instanceId: ${spring.application.name}:${server.port}
 
 #Server

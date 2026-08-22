@@ -9,9 +9,13 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
@@ -29,6 +33,7 @@ public class HttpInterfaceConfig {
     public RestClient.Builder getRestClientBuilderLB()
     {
         RestClient.Builder builder = RestClient.builder();
+
         if(observationRegistry!=null)
         {
             builder.requestInterceptor(createTracingInterceptor());
@@ -38,6 +43,15 @@ public class HttpInterfaceConfig {
 
     private ClientHttpRequestInterceptor createTracingInterceptor() {
         return ((request, body, execution) ->{
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if(attributes!=null)
+            {
+                String auth = attributes.getRequest().getHeader("Authorization");
+                if(auth!=null)
+                {
+                    request.getHeaders().add("Authorization",auth);
+                }
+            }
             if(tracer!=null && propagator!=null && tracer.currentSpan()!=null)
             {
                 propagator.inject(tracer.currentTraceContext().context(),

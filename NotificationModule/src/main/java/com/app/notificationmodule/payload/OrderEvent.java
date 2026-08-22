@@ -9,6 +9,7 @@ import java.util.List;
 public class OrderEvent {
     private String id;
     private String userId;
+    private String email;
     private BigDecimal totalAmount;
     private OrderStatus status;
     private List<OrderItemDTO> orderItems;

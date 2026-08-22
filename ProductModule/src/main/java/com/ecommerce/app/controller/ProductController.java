@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -81,6 +84,7 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.searchProductsByCategory(category,pageNum,pageSize,sortBy,sortDir));
     }
 
+    @PreAuthorize("hasRole('SELLER')")
     @PostMapping("/{categoryId}")
     public ResponseEntity<ProductResponseDTO> createProduct(
             @RequestBody @Valid ProductRequestDTO productRequestDTO,
@@ -90,6 +94,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productRequestDTO,categoryId));
     }
 
+
+    @PreAuthorize("hasRole('SELLER')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProduct(
             @RequestBody @Valid ProductRequestDTO productRequestDTO,
@@ -119,6 +125,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('SELLER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(
             @PathVariable String id

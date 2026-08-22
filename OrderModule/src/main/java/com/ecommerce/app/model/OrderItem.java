@@ -19,6 +19,8 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    private String sellerId;
+
     private String productId;
 
     private Integer quantity;
@@ -30,9 +32,10 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    public OrderItem(String productId, @Positive @NotNull(message = "Quantity Cannot be null.") Integer quantity, BigDecimal totalPrice) {
+    public OrderItem(String productId, @Positive @NotNull(message = "Quantity Cannot be null.") Integer quantity, BigDecimal totalPrice,String sellerId) {
         this.productId = productId;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
+        this.sellerId = sellerId;
     }
 }

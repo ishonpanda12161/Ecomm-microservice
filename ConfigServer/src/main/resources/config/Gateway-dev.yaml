@@ -7,15 +7,13 @@ keycloak:
   clientId: 'oauth2-ecomm-pkce'
 #Gateway
 gateway:
+  httpclient:
+    connect-timeout: 5000
+    response-timeout: 10s
   ratelimit:
     replenish-rate: 100
     burst-capacity: 250
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8443/realms/ecomm-app
   data:
     redis:
       url: ${REDIS_URL}
@@ -68,7 +66,8 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL}
+    registry-fetch-interval-seconds: 5
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
@@ -90,8 +89,8 @@ resilience4j:
     instances:
       gatewayBreaker:
         register-health-indicator: true
-        sliding-window-size: 10
-        minimum-number-of-calls: 10
+        sliding-window-size: 5
+        minimum-number-of-calls: 5
         permitted-number-of-calls-in-half-open-state: 3
         wait-duration-in-open-state: 10s
         failure-rate-threshold: 50

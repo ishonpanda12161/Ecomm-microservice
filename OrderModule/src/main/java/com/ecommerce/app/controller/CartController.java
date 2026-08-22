@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,11 +23,11 @@ public class CartController {
 
     @PostMapping()
     public ResponseEntity<Boolean> addToCart(
-            @RequestHeader("USER_ID") String userId,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody @Valid CartItemDTO cartItemDTO
     )
     {
-        Boolean response = cartService.addToCart(userId,cartItemDTO);
+        Boolean response = cartService.addToCart(jwt.getSubject(),cartItemDTO);
         if(!response)
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -35,29 +37,29 @@ public class CartController {
 
     @GetMapping()
     public ResponseEntity<CartDTO> getCart(
-            @RequestHeader("USER_ID") String userId
+            @AuthenticationPrincipal Jwt jwt
     )
     {
-        return ResponseEntity.ok().body(cartService.getCart(userId));
+        return ResponseEntity.ok().body(cartService.getCart(jwt.getSubject()));
     }
 
     @PutMapping("/{productId}/{operation}")
     public ResponseEntity<Boolean> updateCart(
-            @RequestHeader("USER_ID") String userId,
+            @AuthenticationPrincipal Jwt jwt,
             @PathVariable String productId,
             @PathVariable String operation
     )
     {
-        return ResponseEntity.ok().body(cartService.updateCart(userId,productId,operation));
+        return ResponseEntity.ok().body(cartService.updateCart(jwt.getSubject(),productId,operation));
     }
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<CartDTO> deleteFromCart(
-            @RequestHeader("USER_ID") String userId,
+            @AuthenticationPrincipal Jwt jwt,
             @PathVariable String productId
     )
     {
-        cartService.deleteFromCart(userId,productId);
+        cartService.deleteFromCart(jwt.getSubject(),productId);
         return ResponseEntity.noContent().build();
     }
 

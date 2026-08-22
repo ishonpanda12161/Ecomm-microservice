@@ -4,18 +4,26 @@ import com.ecommerce.app.config.HttpService.ProductService;
 import com.ecommerce.app.config.HttpService.UserService;
 import com.ecommerce.app.exception.APIException;
 import com.ecommerce.app.exception.ResourceNotFoundException;
+import com.ecommerce.app.mapper.OrderItemMapper;
 import com.ecommerce.app.mapper.OrderMapper;
 import com.ecommerce.app.model.*;
-import com.ecommerce.app.payload.OrderResponseDTO;
-import com.ecommerce.app.payload.ProductResponseDTO;
+import com.ecommerce.app.payload.*;
 import com.ecommerce.app.repository.CartRepository;
+import com.ecommerce.app.repository.OrderItemRepository;
 import com.ecommerce.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -26,28 +34,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
-//    @Value("${exchange.exchange.name}")
-//    private String exchangeName;
-//    @Value("${exchange.key.created}")
-//    private String createdKey;
-//    @Value("${exchange.key.cancelled}")
-//    private String cancelledKey;
     @Value("${exchange.key.delivered}")
     private String deliveredKey;
     @Value("${exchange.key.shipped}")
     private String shippedKey;
     @Value("${exchange.key.confirmed}")
     private String confirmedKey;
-
+    private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CartRepository cartRepository;
     private final ProductService productService;
     private final UserService userService;
+    private final OrderItemMapper orderItemMapper;
     //private final RabbitTemplate rabbitTemplate;
     private final StreamBridge streamBridge;
-
     private List<OrderStatus> cancellableStatus = List.of(OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.CREATED);
+
+
     @Transactional
     @Override
     public OrderResponseDTO createOrder(String userId) {
@@ -70,7 +74,7 @@ public class OrderServiceImpl implements OrderService{
                     BigDecimal totalPrice = (product.getPrice().multiply(BigDecimal.ONE.subtract(product.getDiscount().divide(BigDecimal.valueOf(100)))))
                             .multiply(BigDecimal.valueOf(item.getQuantity()));
                     productService.decreaseProductQuantity(item.getProductId(),item.getQuantity());
-                    return new OrderItem(product.getId(),item.getQuantity(),totalPrice);
+                    return new OrderItem(product.getId(),item.getQuantity(),totalPrice,product.getSellerId());
                 }).toList();
 
         BigDecimal totalAmount = orderItems.stream()
@@ -90,14 +94,18 @@ public class OrderServiceImpl implements OrderService{
         });
         cart.getCartItems().clear();
 
-        //publish event
-//        rabbitTemplate.convertAndSend(
-//                exchangeName,
-//                createdKey,
-//                orderMapper.toOrderEvent(savedOrder)
-//        );
+        OrderEvent event = orderMapper.toOrderEvent(savedOrder);
+        UserResponseDTO userResponseDTO = getUser(userId);
+        event.setEmail(userResponseDTO.getEmail());
 
-        streamBridge.send("createOrder-out-0",orderMapper.toOrderEvent(savedOrder));
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        streamBridge.send("createOrder-out-0",event);
+                    }
+                }
+        );
 
         return orderMapper.toDTO(savedOrder);
     }
@@ -128,8 +136,18 @@ public class OrderServiceImpl implements OrderService{
         });
 
         order = orderRepository.findByIdAndUserId(orderId,userId);
+        OrderEvent event = orderMapper.toOrderEvent(order);
+        UserResponseDTO userResponseDTO = getUser(userId);
+        event.setEmail(userResponseDTO.getEmail());
 
-        streamBridge.send("cancelOrder-out-0",orderMapper.toOrderEvent(order));
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        streamBridge.send("createOrder-out-0",event);
+                    }
+                }
+        );
 
         return Boolean.TRUE;
     }
@@ -164,31 +182,121 @@ public class OrderServiceImpl implements OrderService{
 //                key,
 //                orderMapper.toOrderEvent(order)
 //        );
-        streamBridge.send("updateOrderStatus-out-0",
-                MessageBuilder.withPayload(orderMapper.toOrderEvent(order)).setHeader("target_key",key).build());
+        OrderEvent event = orderMapper.toOrderEvent(order);
+        UserResponseDTO userResponseDTO = getUser(userId);
+        event.setEmail(userResponseDTO.getEmail());
+
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        streamBridge.send("updateOrderStatus-out-0",
+                                MessageBuilder.withPayload(event).setHeader("target_key",key).build());
+                    }
+                }
+        );
+
 
         return Boolean.TRUE;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<OrderResponseDTO> getUserOrders(String userId) {
-        List<Order> orders = orderRepository.findByUserId(userId);
-        return orderMapper.toDTOList(orders);
+    public OrderSearchResponseDTO getUserOrders(String userId,Integer pageNum, Integer pageSize, String sortBy, String sortDir) {
+
+        Sort sortByAndOrder = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sortByAndOrder);
+        Page<Order> orderPage = orderRepository.findByUserId(userId,pageable);
+        List<OrderResponseDTO> orderResponseDTOS = orderMapper.toDTOList(orderPage.getContent());
+        if (orderResponseDTOS.isEmpty()) {
+            throw new APIException("No orders found.", "Content", LocalDateTime.now());
+        }
+
+        OrderSearchResponseDTO response = new OrderSearchResponseDTO();
+        response.setOrderResponseDTOS(orderResponseDTOS);
+        response.setLastPage(orderPage.isLast());
+        response.setPageNum(orderPage.getNumber());
+        response.setPageSize(orderPage.getSize());
+        response.setTotalElements(orderPage.getTotalElements());
+        response.setTotalPages(orderPage.getTotalPages());
+
+        return response;
+    }
+
+    @Override
+    public OrderSearchResponseDTO getAllOrders(Integer pageNum, Integer pageSize, String sortBy, String sortDir) {
+
+        Sort sortByAndOrder = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sortByAndOrder);
+        Page<Order> orderPage = orderRepository.findAll(pageable);
+        List<OrderResponseDTO> orderResponseDTOS = orderMapper.toDTOList(orderPage.getContent());
+        if (orderResponseDTOS.isEmpty()) {
+            throw new APIException("No orders found.", "Content", LocalDateTime.now());
+        }
+
+        OrderSearchResponseDTO response = new OrderSearchResponseDTO();
+        response.setOrderResponseDTOS(orderResponseDTOS);
+        response.setLastPage(orderPage.isLast());
+        response.setPageNum(orderPage.getNumber());
+        response.setPageSize(orderPage.getSize());
+        response.setTotalElements(orderPage.getTotalElements());
+        response.setTotalPages(orderPage.getTotalPages());
+
+        return response;
+    }
+
+    @Override
+    public OrderItemSearchResponseDTO getSellerOrders(String keycloakId,Integer pageNum, Integer pageSize, String sortBy, String sortDir) {
+
+        UserResponseDTO user = getUser(keycloakId);
+
+        Sort sortByAndOrder = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sortByAndOrder);
+
+        Page<OrderItem> orderItemPage = orderItemRepository.findBySellerId(user.getId(),pageable);
+        List<OrderItem> orderItemResponseDTOS = orderItemMapper.toList(orderItemPage.getContent());
+        if (orderItemResponseDTOS.isEmpty()) {
+            throw new APIException("No orders found.", "Content", LocalDateTime.now());
+        }
+
+        OrderItemSearchResponseDTO response = new OrderItemSearchResponseDTO();
+        response.setOrderItems(orderItemResponseDTOS);
+        response.setLastPage(orderItemPage.isLast());
+        response.setPageNum(orderItemPage.getNumber());
+        response.setPageSize(orderItemPage.getSize());
+        response.setTotalElements(orderItemPage.getTotalElements());
+        response.setTotalPages(orderItemPage.getTotalPages());
+
+        return response;
     }
 
 
-    private Cart getUserCart(String userId)
+    private Cart getUserCart(String keycloakId)
     {
-        Cart cart = cartRepository.findByUserId(userId);
+        UserResponseDTO user = getUser(keycloakId);
+        Cart cart = cartRepository.findByUserId(user.getId());
         if(cart==null)
         {
             Cart newCart = new Cart();
-            newCart.setUserId(userId);
+            newCart.setUserId(user.getId());
             return cartRepository.save(newCart);
         }
         return cart;
     }
 
+    private UserResponseDTO getUser(String keycloakId)
+    {
+        UserResponseDTO user = userService.getUserByKeycloakId(keycloakId);
+        return user;
+    }
 
 }

@@ -2,6 +2,8 @@ package com.ecommerce.app.repository;
 
 import com.ecommerce.app.model.Order;
 import com.ecommerce.app.model.OrderStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,8 +13,8 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order,String> {
+    
     Order findByIdAndUserId(String orderId, String userId);
-    List<Order> findByUserId(String userId);
 
     @Modifying
     @Query(
@@ -32,4 +34,6 @@ public interface OrderRepository extends JpaRepository<Order,String> {
             List<OrderStatus> cancellable,
             Long version
     );
+
+    Page<Order> findByUserId(String userId, Pageable pageable);
 }

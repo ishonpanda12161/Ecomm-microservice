@@ -8,9 +8,12 @@ import com.ecommerce.app.payload.AddressDTO;
 import com.ecommerce.app.repository.AddressRepository;
 import com.ecommerce.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.bind.annotation.RequestHeader;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,20 +26,20 @@ public class AddressServiceImpl implements AddressService{
     private final UserRepository userRepository;
 
     @Override
-    public Address addAddress(String userId, AddressDTO addressDTO) {
+    public Address addAddress(String keycloakId,AddressDTO addressDTO) {
 
+        User user = getUser(keycloakId);
         Address address = addressMapper.toEntity(addressDTO);
-        address.setUserId(userId);
+        address.setUserId(user.getId());
 
         return addressRepository.save(address);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<AddressDTO> getAllAddress(String userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User","UserId",userId,LocalDateTime.now()));
-        List<Address> addresses = addressRepository.findByUserId(userId);
+    public List<AddressDTO> getAllAddress(String keycloakId) {
+        User user = getUser(keycloakId);
+        List<Address> addresses = addressRepository.findByUserId(user.getId());
         return addressMapper.toDTOList(addresses);
     }
 
@@ -62,5 +65,12 @@ public class AddressServiceImpl implements AddressService{
                 .orElseThrow(()-> new ResourceNotFoundException("Address","AddressId",addressId,LocalDateTime.now()));
         addressRepository.delete(address);
         return address;
+    }
+
+    private User getUser(String keycloakId)
+    {
+        User user = userRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(()-> new ResourceNotFoundException("User","Keycloak ID",keycloakId,LocalDateTime.now()));
+        return user;
     }
 }

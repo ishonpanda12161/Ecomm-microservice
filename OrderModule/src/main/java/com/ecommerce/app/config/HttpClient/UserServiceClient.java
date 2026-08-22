@@ -8,7 +8,7 @@ import org.springframework.web.service.annotation.HttpExchange;
 @HttpExchange
 public interface UserServiceClient {
 
-    @GetExchange("/api/user/{id}")
-    UserResponseDTO getUser(@PathVariable String id);
+    @GetExchange("/api/user/keycloak/{keycloakId}")
+    UserResponseDTO getUser(@PathVariable String keycloakId);
 
 }

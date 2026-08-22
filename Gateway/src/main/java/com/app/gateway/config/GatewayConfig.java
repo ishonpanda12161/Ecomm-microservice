@@ -1,6 +1,8 @@
 package com.app.gateway.config;
 
+import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -9,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
 
+import java.util.Base64;
 import java.util.Objects;
 
 @Configuration
@@ -25,12 +28,30 @@ public class GatewayConfig {
         return new RedisRateLimiter(replenishRate,burstCapacity);
     }
 
+    //set key. rate limit by user id
     @Bean
-    public KeyResolver hostNameKeyResolver()
+    public KeyResolver jwtKeyResolver()
     {
-        return exchange -> Mono.just(
-                Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getHostName()
-        );
+        return exchange ->
+        {
+            String auth = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+            if(auth==null || !auth.startsWith("Bearer "))
+            {
+                return Mono.just("anonymous");
+            }
+
+            String token = auth.substring(7);
+            try{
+                String[] parts = token.split("\\.");
+                String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
+                String sub = new JSONObject(payload).getString("sub");
+                return Mono.just(sub);
+            }
+            catch (Exception e)
+            {
+                return Mono.just("anonymous");
+            }
+        };
     }
 
     @Bean
@@ -42,7 +63,7 @@ public class GatewayConfig {
                             .filters(f -> f
                                     .circuitBreaker(config -> config.setName("gatewayBreaker").setFallbackUri("forward:/fallback/USER"))
                                     .requestRateLimiter(config ->
-                                            config.setRateLimiter(redisRateLimiter()).setKeyResolver(hostNameKeyResolver())))
+                                            config.setRateLimiter(redisRateLimiter()).setKeyResolver(jwtKeyResolver())))
                             .uri("lb://USERMODULE")
                 )
                 .route("PRODUCTMODULE",r ->
@@ -50,7 +71,7 @@ public class GatewayConfig {
                                 .filters(f -> f
                                         .circuitBreaker(config -> config.setName("gatewayBreaker").setFallbackUri("forward:/fallback/PRODUCT"))
                                         .requestRateLimiter(config ->
-                                                config.setRateLimiter(redisRateLimiter()).setKeyResolver(hostNameKeyResolver())))
+                                                config.setRateLimiter(redisRateLimiter()).setKeyResolver(jwtKeyResolver())))
                                 .uri("lb://PRODUCTMODULE")
                 )
                 .route("ORDERMODULE",r ->
@@ -58,7 +79,7 @@ public class GatewayConfig {
                                 .filters(f -> f
                                         .circuitBreaker(config -> config.setName("gatewayBreaker").setFallbackUri("forward:/fallback/ORDER"))
                                         .requestRateLimiter(config ->
-                                                config.setRateLimiter(redisRateLimiter()).setKeyResolver(hostNameKeyResolver()))
+                                                config.setRateLimiter(redisRateLimiter()).setKeyResolver(jwtKeyResolver()))
                                 )
                                 .uri("lb://ORDERMODULE")
                 )

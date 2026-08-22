@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService{
     private final UserMapper userMapper;
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
-    private final KeycloakAdminService keycloakAdminService;
+    private final KeycloakService keycloakService;
 
     @Override
     public UserSearchResponseDTO fetchAllUser(Integer pageNum, Integer pageSize, String sortBy, String sortDir) {
@@ -100,20 +100,17 @@ public class UserServiceImpl implements UserService{
         }
         User user = userMapper.toEntity(userRequestDTO);
 
-        String token = keycloakAdminService.getAccessToken();
-        String keycloakUserId = keycloakAdminService.createUser(token,userRequestDTO);
-        user.setKeycloakId(keycloakUserId);
-
-        keycloakAdminService.assignClientRoleToUser(userRequestDTO.getUsername(),"USER",keycloakUserId);
-
+        String keycloakId = keycloakService.createKeycloakUser(userRequestDTO);
+        keycloakService.assignRole(keycloakId,userRequestDTO.getUserRole().name());
+        user.setKeycloakId(keycloakId);
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }
 
     @Override
-    public UserResponseDTO updateUser(String id, UserRequestDTO userRequestDTO) {
-        User user = userRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("User","UserId",id,LocalDateTime.now()));
+    public UserResponseDTO updateUser(String keycloakId, UserRequestDTO userRequestDTO) {
+        User user = userRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(()-> new ResourceNotFoundException("User","keycloakId",keycloakId,LocalDateTime.now()));
 
         user.setFirstName(userRequestDTO.getFirstName());
         user.setLastName(userRequestDTO.getLastName());
@@ -122,19 +119,30 @@ public class UserServiceImpl implements UserService{
         user.setPhone(userRequestDTO.getPhone());
         user.setUserRole(userRequestDTO.getUserRole());
 
+        keycloakService.updateKeycloakUser(keycloakId,userRequestDTO);
         return userMapper.toDto(userRepository.save(user));
 
     }
 
     @Override
-    public UserResponseDTO deleteUser(String id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("User","UserId",id,LocalDateTime.now()));
-        List<Address> addresses = addressRepository.findByUserId(id);
+    public UserResponseDTO deleteUser(String keycloakId) {
+        User user = userRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(()-> new ResourceNotFoundException("User","keycloakId",keycloakId,LocalDateTime.now()));
+        List<Address> addresses = addressRepository.findByUserId(user.getId());
         addressRepository.deleteAll(addresses);
         userRepository.delete(user);
-        // ADD: will add keycloak delete user later.
+        keycloakService.deleteKeycloakUser(keycloakId);
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserResponseDTO fetchUserByKeycloakId(String keycloakId) {
+        User user = userRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(()-> new ResourceNotFoundException("User","keycloakId",keycloakId,LocalDateTime.now()));
+        List<Address> addresses = addressRepository.findByUserId(keycloakId);
+        UserResponseDTO userResponseDTO = userMapper.toDto(user);
+        userResponseDTO.setAddressDTOs(addressMapper.toDTOList(addresses));
+        return userResponseDTO;
     }
 
 }

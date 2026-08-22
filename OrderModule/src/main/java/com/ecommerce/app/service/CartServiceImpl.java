@@ -2,6 +2,7 @@ package com.ecommerce.app.service;
 
 import com.ecommerce.app.config.HttpService.ProductService;
 import com.ecommerce.app.config.HttpService.UserService;
+import com.ecommerce.app.exception.ResourceNotFoundException;
 import com.ecommerce.app.mapper.CartMapper;
 import com.ecommerce.app.model.Cart;
 import com.ecommerce.app.model.CartItem;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +38,7 @@ public class CartServiceImpl implements CartService{
 
     @Transactional
     @Override
-    public Boolean addToCart(String userId, CartItemDTO cartItemDTO) {
+    public Boolean addToCart(String keycloakId, CartItemDTO cartItemDTO) {
 
         ProductResponseDTO product = productService.getProduct(cartItemDTO.getProductId());
 
@@ -45,7 +47,7 @@ public class CartServiceImpl implements CartService{
             return Boolean.FALSE;
         }
 
-        UserResponseDTO user = userService.getUser(userId);
+        UserResponseDTO user = userService.getUserByKeycloakId(keycloakId);
 
         Cart cart = getUserCart(user.getId());
         CartItem cartItem = cartItemRepository.findByCartAndProductId(cart,cartItemDTO.getProductId());
@@ -68,9 +70,9 @@ public class CartServiceImpl implements CartService{
 
     @Transactional(readOnly = true)
     @Override
-    public CartDTO getCart(String userId) {
+    public CartDTO getCart(String keycloakId) {
 
-        UserResponseDTO user = userService.getUser(userId);
+        UserResponseDTO user = userService.getUserByKeycloakId(keycloakId);
 
         Cart cart = getUserCart(user.getId());
 
@@ -82,9 +84,9 @@ public class CartServiceImpl implements CartService{
 
     @Transactional
     @Override
-    public Boolean updateCart(String userId, String productId, String operation) {
+    public Boolean updateCart(String keycloakId, String productId, String operation) {
 
-        UserResponseDTO user = userService.getUser(userId);
+        UserResponseDTO user = userService.getUserByKeycloakId(keycloakId);
 
         Cart cart = getUserCart(user.getId());
         CartItem cartItem = cartItemRepository.findByCartAndProductId(cart,productId);
@@ -118,15 +120,16 @@ public class CartServiceImpl implements CartService{
 
     @Transactional
     @Override
-    public CartDTO deleteFromCart(String userId, String productId) {
+    public CartDTO deleteFromCart(String keycloakId, String productId) {
 
-        UserResponseDTO user = userService.getUser(userId);
+        UserResponseDTO user = userService.getUserByKeycloakId(keycloakId);
 
         Cart cart = getUserCart(user.getId());
 
         cart.getCartItems().removeIf(cartItem -> cartItem.getProductId().equals(productId));
+        cart = cartRepository.saveAndFlush(cart);
 
-        CartDTO cartDTO = cartMapper.toDTO(cartRepository.save(cart));
+        CartDTO cartDTO = cartMapper.toDTO(cart);
         cartDTO.setTotalPrice(calculateTotalPrice(cart));
         return cartDTO;
     }
@@ -146,8 +149,12 @@ public class CartServiceImpl implements CartService{
     private BigDecimal calculateTotalPrice(Cart cart)
     {
 
-        Set<String> productIds = cart.getCartItems().stream().map(CartItem::getId).collect(Collectors.toSet());
+        Set<String> productIds = cart.getCartItems().stream().map(CartItem::getProductId).collect(Collectors.toSet());
         List<ProductResponseDTO> productsList = productService.getBatch(productIds);
+        if(productsList==null || productsList.isEmpty())
+        {
+            return BigDecimal.ZERO;
+        }
         Map<String,ProductResponseDTO> products = productsList.stream().collect(Collectors.toMap(ProductResponseDTO::getId,p->p));
 
         BigDecimal total = cart.getCartItems().stream()
@@ -160,4 +167,5 @@ public class CartServiceImpl implements CartService{
                 }).reduce(BigDecimal.ZERO,BigDecimal::add);
         return total.setScale(2, RoundingMode.HALF_UP);
     }
+
 }
