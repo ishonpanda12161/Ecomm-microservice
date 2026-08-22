@@ -8,4 +8,3 @@ Logging/prometheus-metrics/.data
 docker-compose.yml
 .idea
 Zipkin/
-ConfigServer/src/main/resources/config

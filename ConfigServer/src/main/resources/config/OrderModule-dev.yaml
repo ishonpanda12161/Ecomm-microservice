@@ -44,24 +44,23 @@ spring:
           destination: ecomm.exchange.order
           content-type: application/json
           binder: kafka
-#
-#      kafka:
-#        binder:
-#          brokers: localhost:9092
       kafka:
         binder:
-          brokers: ecomm-kafka-ishon.i.aivencloud.com:13199
-          jaas:
-            loginModule: org.apache.kafka.common.security.scram.ScramLoginModule
-            controlFlag: required
-            options:
-              username: "avnadmin"
-              password: "AVNS_7LApTBG7qsioA-B1rW-"
-          configuration:
-            security.protocol: SASL_SSL
-            sasl.mechanism: SCRAM-SHA-256
-            ssl.truststore.location: 'C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\NotificationModule\src\main\resources\ca.pem'
-            ssl.truststore.type: 'PEM'
+          brokers: ${KAFKA_BROKER}
+#      kafka:
+#        binder:
+#          brokers: ecomm-kafka-ishon.i.aivencloud.com:13199
+#          jaas:
+#            loginModule: org.apache.kafka.common.security.scram.ScramLoginModule
+#            controlFlag: required
+#            options:
+#              username:
+#              password:
+#          configuration:
+#            security.protocol: SASL_SSL
+#            sasl.mechanism: SCRAM-SHA-256
+#            ssl.truststore.location: 'ca.pem'
+#            ssl.truststore.type: 'PEM'
 
 #      rabbit:
 #        bindings:
