@@ -12,19 +12,25 @@
     <artifactId>ProductModule</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ProductModule</name>
-    <description>ProductModule</description>
-    <url/>
+    <description>
+        Product service for ecommerce.
+    </description>
+    <url>https://github.com/ishonpanda12161/Ecomm-microservice</url>
     <licenses>
         <license/>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>ishonpanda12161</id>
+            <name>Ishon Panda</name>
+            <email>pandaishon@gmail.com</email>
+        </developer>
     </developers>
     <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
+        <connection>scm:git:https://github.com/ishonpanda12161/Ecomm-microservice.git</connection>
+        <developerConnection>scm:git:ssh://github.com/ishonpanda12161/Ecomm-microservice.git</developerConnection>
+        <url>https://github.com/ishonpanda12161/Ecomm-microservice</url>
+        <tag>HEAD</tag>
     </scm>
     <properties>
         <java.version>25</java.version>
@@ -124,6 +130,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <imageName>ecomm/product-module</imageName>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
 
 import java.util.Base64;
-import java.util.Objects;
 
 @Configuration
 public class GatewayConfig {
