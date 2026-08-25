@@ -87,11 +87,12 @@ public class ProductController {
     @PreAuthorize("hasRole('SELLER')")
     @PostMapping("/{categoryId}")
     public ResponseEntity<ProductResponseDTO> createProduct(
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody @Valid ProductRequestDTO productRequestDTO,
             @PathVariable String categoryId
             )
     {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productRequestDTO,categoryId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(jwt.getSubject(),productRequestDTO,categoryId));
     }
 
 

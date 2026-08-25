@@ -16,7 +16,7 @@ public interface ProductService {
     @Transactional(readOnly = true)
     ProductSearchResponseDTO searchProducts(Integer pageNum, Integer pageSize, String sortBy, String sortDir);
 
-    ProductResponseDTO createProduct(@Valid ProductRequestDTO productRequestDTO,String categoryId);
+    ProductResponseDTO createProduct(String sellerId,@Valid ProductRequestDTO productRequestDTO,String categoryId);
 
     @Transactional
     ProductResponseDTO updateProduct(@Valid ProductRequestDTO productRequestDTO, String id);

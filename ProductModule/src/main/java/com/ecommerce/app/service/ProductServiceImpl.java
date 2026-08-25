@@ -168,7 +168,7 @@ public class ProductServiceImpl implements ProductService{
 
 
     @Override
-    public ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO,String categoryId) {
+    public ProductResponseDTO createProduct(String sellerId,ProductRequestDTO productRequestDTO,String categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(()-> new ResourceNotFoundException("Category","Id",categoryId,LocalDateTime.now()));
 
@@ -179,6 +179,7 @@ public class ProductServiceImpl implements ProductService{
         }
         Product product = productMapper.toEntity(productRequestDTO);
         product.setCategory(category);
+        product.setSellerId(sellerId);
         product = productRepository.save(product);
         return productMapper.toDTO(product);
     }

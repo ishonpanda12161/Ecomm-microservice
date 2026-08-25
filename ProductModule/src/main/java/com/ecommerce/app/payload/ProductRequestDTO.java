@@ -13,7 +13,6 @@ public class ProductRequestDTO {
 
     private String categoryName;
 
-    @NotBlank(message = "Seller ID cannot be blank.")
     private String sellerId;
 
     private String description;
