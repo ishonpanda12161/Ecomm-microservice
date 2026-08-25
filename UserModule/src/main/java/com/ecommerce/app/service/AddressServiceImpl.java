@@ -8,12 +8,9 @@ import com.ecommerce.app.payload.AddressDTO;
 import com.ecommerce.app.repository.AddressRepository;
 import com.ecommerce.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestHeader;
+
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -80,6 +80,23 @@ logging:
   file:
     name: Logs/${spring.application.name}.log
 
+#Actuator + Zipkin
+management:
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      circuitbreakers:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,busrefresh,refresh,prometheus,circuitbreakers
+  tracing:
+    sampling:
+      probability: 1.0
+
+
 #Eureka
 eureka:
   client:

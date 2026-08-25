@@ -1,13 +1,11 @@
 package com.ecommerce.app.service;
 
-import com.ecommerce.app.config.HttpService.KeycloakAdminService;
 import com.ecommerce.app.exception.ResourceAlreadyExistsException;
 import com.ecommerce.app.exception.ResourceNotFoundException;
 import com.ecommerce.app.mapper.AddressMapper;
 import com.ecommerce.app.mapper.UserMapper;
 import com.ecommerce.app.model.Address;
 import com.ecommerce.app.model.User;
-import com.ecommerce.app.payload.AddressDTO;
 import com.ecommerce.app.payload.UserRequestDTO;
 import com.ecommerce.app.payload.UserResponseDTO;
 import com.ecommerce.app.payload.UserSearchResponseDTO;
@@ -19,7 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

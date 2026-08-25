@@ -5,5 +5,5 @@ spring:
   profiles:
     active: dev
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:${CONFIG_SERVER_URL}
 
