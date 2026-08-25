@@ -101,6 +101,7 @@ services:
     ports:
       - "8085:8085"
     environment:
+     ZIPKIN_URL: ${ZIPKIN_URL}
      EUREKA_INSTANCE_HOSTNAME: notification
      SPRING_CONFIG_IMPORT: configserver:http://config:8888
      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
@@ -134,6 +135,7 @@ services:
     ports:
       - "8084:8084"
     environment:
+       ZIPKIN_URL: ${ZIPKIN_URL}
        EUREKA_INSTANCE_HOSTNAME: order
        SPRING_CONFIG_IMPORT: configserver:http://config:8888
        CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
@@ -170,6 +172,7 @@ services:
     ports:
       - "8083:8083"
     environment:
+       ZIPKIN_URL: ${ZIPKIN_URL}
        EUREKA_INSTANCE_HOSTNAME: product
        SPRING_CONFIG_IMPORT: configserver:http://config:8888
        CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
@@ -206,6 +209,7 @@ services:
     ports:
       - "8082:8082"
     environment:
+       ZIPKIN_URL: ${ZIPKIN_URL}
        EUREKA_INSTANCE_HOSTNAME: user
        SPRING_CONFIG_IMPORT: configserver:http://config:8888
        CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
@@ -244,6 +248,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+       ZIPKIN_URL: ${ZIPKIN_URL}
        EUREKA_INSTANCE_HOSTNAME: gateway
        SPRING_CONFIG_IMPORT: configserver:http://config:8888
        CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
