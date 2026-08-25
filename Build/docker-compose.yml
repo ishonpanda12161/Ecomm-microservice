@@ -50,7 +50,7 @@ services:
 
   config-server:
     container_name: config
-    image: ecomm/config:latest
+    image: ishonpanda/ecomm-config
     networks:
       - backend
     ports:
@@ -72,7 +72,7 @@ services:
     depends_on:
       - config-server
     container_name: eureka
-    image: ecomm/eureka:latest
+    image: ishonpanda/ecomm-eureka
     networks:
       - backend
     ports:
@@ -96,7 +96,7 @@ services:
       - eureka-server
       - config-server
     container_name: notification
-    image: ecomm/notification-module:latest
+    image: ishonpanda/ecomm-notification
     networks:
       - backend
     ports:
@@ -130,7 +130,7 @@ services:
       - eureka-server
       - config-server
     container_name: order
-    image: ecomm/order-module:latest
+    image: ishonpanda/ecomm-order
     networks:
       - backend
     ports:
@@ -167,7 +167,7 @@ services:
       - eureka-server
       - config-server
     container_name: product
-    image: ecomm/product-module:latest
+    image: ishonpanda/ecomm-product
     networks:
       - backend
     ports:
@@ -204,7 +204,7 @@ services:
       - eureka-server
       - config-server
     container_name: user
-    image: ecomm/user-module:latest
+    image: ishonpanda/ecomm-user
     networks:
       - backend
     ports:
@@ -243,7 +243,7 @@ services:
       - product-service
       - user-service
     container_name: gateway
-    image: ecomm/gateway:latest
+    image: ishonpanda/ecomm-gateway
     networks:
       - backend
     ports:
