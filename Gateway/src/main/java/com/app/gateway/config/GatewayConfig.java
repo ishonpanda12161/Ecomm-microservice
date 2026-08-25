@@ -1,8 +1,9 @@
 package com.app.gateway.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -43,8 +44,13 @@ public class GatewayConfig {
             try{
                 String[] parts = token.split("\\.");
                 String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
-                String sub = new JSONObject(payload).getString("sub");
-                return Mono.just(sub);
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode json = mapper.readTree(payload);
+                JsonNode sub = json.get("sub");
+
+                return sub != null
+                        ? Mono.just(sub.asText())
+                        : Mono.just("anonymous");
             }
             catch (Exception e)
             {

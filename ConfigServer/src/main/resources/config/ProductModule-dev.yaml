@@ -6,6 +6,7 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_JWT_ISSUER}
+          jwk-set-uri: ${KEYCLOAK_JWK_URI}
   #Database POSTGRES
   datasource:
     url: ${POSTGRES_URL}
