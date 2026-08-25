@@ -11,7 +11,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/ishonpanda12161/ecomm-config
+          uri: ${CONFIG_FETCH_URL}
           clone-on-start: true
 #        native:
 #          search-locations: file:///C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\ConfigServer\src\main\resources\config
