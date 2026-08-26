@@ -45,6 +45,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
     {
         return httpSecurity.authorizeHttpRequests(req -> req
+                .requestMatchers("/actuator/health/**", "/actuator/info", "/actuator/prometheus").permitAll()
+                .requestMatchers("/actuator/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/api/user").permitAll()
                 .requestMatchers("/api/user/**").hasAnyRole("USER","SELLER","ADMIN")
                 .requestMatchers("/api/address/**").hasAnyRole("USER")

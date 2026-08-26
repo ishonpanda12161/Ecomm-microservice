@@ -8,7 +8,6 @@ services:
       - "9411:9411"
     networks:
       - backend
-      - loki
 
   #Keycloak
   keycloak:
@@ -102,6 +101,7 @@ services:
     ports:
       - "8085:8085"
     environment:
+     #MANAGEMENT_TRACING_EXPORT_ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
      ZIPKIN_URL: ${ZIPKIN_URL}
      EUREKA_INSTANCE_HOSTNAME: notification
      SPRING_CONFIG_IMPORT: configserver:http://config:8888

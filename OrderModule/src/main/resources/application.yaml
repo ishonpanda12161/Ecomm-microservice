@@ -5,4 +5,4 @@ spring:
   profiles:
     active: dev
   config:
-    import: ${CONFIG_SERVER_URL}
+    import: optional:configserver:${CONFIG_SERVER_URL}
