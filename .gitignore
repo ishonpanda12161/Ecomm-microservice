@@ -5,6 +5,7 @@ env
 Logs/
 Logging/loki/.data
 Logging/prometheus-metrics/.data
-docker-compose.yml
 .idea
 Zipkin/
+Build/.data
+Build/.env

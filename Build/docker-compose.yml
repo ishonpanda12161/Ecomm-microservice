@@ -8,6 +8,7 @@ services:
       - "9411:9411"
     networks:
       - backend
+      - loki
 
   #Keycloak
   keycloak:
