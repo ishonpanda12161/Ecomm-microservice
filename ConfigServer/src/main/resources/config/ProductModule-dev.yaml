@@ -37,7 +37,11 @@ logging:
     root: INFO
   file:
     name: Logs/${spring.application.name}.log
-
+  logback:
+    rollingpolicy:
+      file-name-pattern: Logs/${spring.application.name}.%d{yyyy-MM-dd}.log
+      max-history: 1
+      clean-history-on-start: true
 
 #Actuator + Zipkin
 management:

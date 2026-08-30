@@ -20,17 +20,14 @@ public class ProductService {
 
     private final ProductServiceClient productServiceClient;
 
-
-//    @Retry(name = "productRetry",fallbackMethod = "getProductFallback")
-//    @CircuitBreaker(name = "productBreaker")
-    @CircuitBreaker(name = "productBreaker")
     @Retry(name = "productRetry")
+    @CircuitBreaker(name = "productBreaker")
     public ProductResponseDTO getProduct(String id) {
         return productServiceClient.getProduct(id);
     }
 
-    @CircuitBreaker(name = "productBreaker")
     @Retry(name = "productRetry")
+    @CircuitBreaker(name = "productBreaker")
     public List<ProductResponseDTO> getBatch(Set<String> productIds)
     {
         return productServiceClient.getBatch(productIds);

@@ -9,7 +9,7 @@ keycloak:
 gateway:
   httpclient:
     connect-timeout: 5000
-    response-timeout: 10s
+    response-timeout: 30s
   ratelimit:
     replenish-rate: 100
     burst-capacity: 250
@@ -97,6 +97,11 @@ logging:
     root: INFO
   file:
     name: Logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: Logs/${spring.application.name}.%d{yyyy-MM-dd}.log
+      max-history: 1
+      clean-history-on-start: true
 
 #Circuit Breaker
 resilience4j:
@@ -111,3 +116,7 @@ resilience4j:
         failure-rate-threshold: 50
         automatic-transition-from-open-to-half-open-enabled: true
         sliding-window-type: count_based
+  timelimiter:
+    instances:
+      gatewayBreaker:
+        timeout-duration: 30s
