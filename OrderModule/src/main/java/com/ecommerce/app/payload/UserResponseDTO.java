@@ -8,6 +8,7 @@ import java.util.List;
 public class UserResponseDTO {
 
     private String id;
+    private String keycloakId;
     private String firstName;
     private String lastName;
     private String email;

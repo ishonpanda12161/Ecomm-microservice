@@ -262,7 +262,7 @@ public class OrderServiceImpl implements OrderService{
 
         Pageable pageable = PageRequest.of(pageNum, pageSize, sortByAndOrder);
 
-        Page<OrderItem> orderItemPage = orderItemRepository.findBySellerId(user.getId(),pageable);
+        Page<OrderItem> orderItemPage = orderItemRepository.findBySellerId(user.getKeycloakId(),pageable);
         List<OrderItem> orderItemResponseDTOS = orderItemMapper.toList(orderItemPage.getContent());
         if (orderItemResponseDTOS.isEmpty()) {
             throw new APIException("No orders found.", "Content", LocalDateTime.now());
