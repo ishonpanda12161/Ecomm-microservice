@@ -78,12 +78,13 @@ logging:
   level:
     root: INFO
   file:
-    name: Logs/${spring.application.name}.log
+    name: /workspace/Logs/${spring.application.name}.log
   logback:
     rollingpolicy:
-      file-name-pattern: Logs/${spring.application.name}.%d{yyyy-MM-dd}.log
+      file-name-pattern: /workspace/Logs/${spring.application.name}.%d{yyyy-MM-dd}.log
       max-history: 1
       clean-history-on-start: true
+
 #Actuator + Zipkin
 management:
   endpoint:

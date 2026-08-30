@@ -90,4 +90,14 @@ public class OrderController {
     {
         return ResponseEntity.ok().body(orderService.updateOrderStatus(jwt.getSubject(),orderId,status));
     }
+
+    @PutMapping("/item/{status}/{orderItemId}")
+    public ResponseEntity<Boolean> updateOrderItemStatus(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable String orderItemId,
+            @PathVariable OrderStatus status
+    )
+    {
+        return ResponseEntity.ok().body(orderService.updateOrderItemStatus(jwt.getSubject(),orderItemId,status));
+    }
 }

@@ -4,6 +4,7 @@ import com.ecommerce.app.model.OrderStatus;
 import com.ecommerce.app.payload.OrderItemSearchResponseDTO;
 import com.ecommerce.app.payload.OrderResponseDTO;
 import com.ecommerce.app.payload.OrderSearchResponseDTO;
+import org.jspecify.annotations.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public interface OrderService {
     OrderSearchResponseDTO getAllOrders(Integer pageNum, Integer pageSize, String sortBy, String sortDir);
 
     OrderItemSearchResponseDTO getSellerOrders(String keycloakId, Integer pageNum, Integer pageSize, String sortBy, String sortDir);
+
+    @Transactional
+    Boolean updateOrderItemStatus(String keycloakId, String orderItemId, OrderStatus status);
 }

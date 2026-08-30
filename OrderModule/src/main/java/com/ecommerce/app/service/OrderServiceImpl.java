@@ -12,6 +12,7 @@ import com.ecommerce.app.repository.CartRepository;
 import com.ecommerce.app.repository.OrderItemRepository;
 import com.ecommerce.app.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.domain.Page;
@@ -33,8 +34,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
-    @Value("${exchange.key.delivered}")
-    private String deliveredKey;
+    @Value("${exchange.key.completed}")
+    private String completedKey;
     @Value("${exchange.key.shipped}")
     private String shippedKey;
     @Value("${exchange.key.confirmed}")
@@ -131,8 +132,11 @@ public class OrderServiceImpl implements OrderService{
         }
 
         order.getItems().forEach(orderItem -> {
+            orderItem.setStatus(OrderStatus.CANCELLED);
             productService.increaseProductQuantity(orderItem.getProductId(),orderItem.getQuantity());
         });
+
+        orderItemRepository.saveAll(order.getItems());
 
         order = orderRepository.findByIdAndUserId(orderId,userId);
         OrderEvent event = orderMapper.toOrderEvent(order);
@@ -159,12 +163,15 @@ public class OrderServiceImpl implements OrderService{
         {
             return Boolean.FALSE;
         }
-
+        if(order.getStatus().equals(OrderStatus.COMPLETED))
+        {
+            return Boolean.FALSE;
+        }
         order.setStatus(status);
         orderRepository.save(order);
 
         String key = switch (status) {
-            case DELIVERED -> deliveredKey;
+            case COMPLETED -> completedKey;
             case SHIPPED -> shippedKey;
             case CONFIRMED -> confirmedKey;
             default -> throw new ResourceNotFoundException(
@@ -175,12 +182,6 @@ public class OrderServiceImpl implements OrderService{
             );
         };
 
-        //publish event
-//        rabbitTemplate.convertAndSend(
-//                exchangeName,
-//                key,
-//                orderMapper.toOrderEvent(order)
-//        );
         OrderEvent event = orderMapper.toOrderEvent(order);
         UserResponseDTO userResponseDTO = getUser(userId);
         event.setEmail(userResponseDTO.getEmail());
@@ -276,6 +277,23 @@ public class OrderServiceImpl implements OrderService{
         response.setTotalPages(orderItemPage.getTotalPages());
 
         return response;
+    }
+
+    @Transactional
+    @Override
+    public Boolean updateOrderItemStatus(@Nullable String keycloakId, String orderItemId, OrderStatus status) {
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order Item","ID",orderItemId,LocalDateTime.now()));
+
+        if(orderItem==null)
+        {
+            return Boolean.FALSE;
+        }
+
+        orderItem.setStatus(status);
+        orderItemRepository.save(orderItem);
+
+        return Boolean.TRUE;
     }
 
 

@@ -23,6 +23,8 @@ public class OrderItem {
 
     private String productId;
 
+    private OrderStatus status;
+
     private Integer quantity;
 
     private BigDecimal totalPrice;
