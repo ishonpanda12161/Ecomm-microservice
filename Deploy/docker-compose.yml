@@ -1,0 +1,271 @@
+services:
+  #Keycloak
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:26.7.1
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    ports:
+      - "8443:8080"
+    command:
+      - "start-dev"
+    networks:
+      - backend
+
+  kafka:
+    image: confluentinc/cp-kafka:8.0.7
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_LISTENERS: "PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:29092,PLAINTEXT_HOST://kafka:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:29093"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - backend
+
+  config-server:
+    container_name: config
+    image: ishonpanda/ecomm-config
+    networks:
+      - backend
+    ports:
+      - "8888:8888"
+    environment:
+     EUREKA_INSTANCE_HOSTNAME: config
+     RABBITMQ_HOST: ${RABBITMQ_HOST}
+     RABBITMQ_PORT: ${RABBITMQ_PORT}
+     RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+     RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+     RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+     REDIS_URL: ${REDIS_URL}
+     EUREKA_URL: ${EUREKA_URL}
+    volumes:
+      - ../Logs:/workspace/Logs
+    restart: unless-stopped
+
+  eureka-server:
+    depends_on:
+      - config-server
+    container_name: eureka
+    image: ishonpanda/ecomm-eureka
+    networks:
+      - backend
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_INSTANCE_HOSTNAME: eureka
+      CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+      REDIS_URL: ${REDIS_URL}
+      EUREKA_URL: ${EUREKA_URL}
+    volumes:
+      - ../Logs:/workspace/Logs
+    restart: unless-stopped
+
+  notification-service:
+    depends_on:
+      - eureka-server
+      - config-server
+    container_name: notification
+    image: ishonpanda/ecomm-notification
+    networks:
+      - backend
+    ports:
+      - "8085:8085"
+    environment:
+     #MANAGEMENT_TRACING_EXPORT_ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
+     ZIPKIN_URL: ${ZIPKIN_URL}
+     EUREKA_INSTANCE_HOSTNAME: notification
+     SPRING_CONFIG_IMPORT: configserver:http://config:8888
+     CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+     RABBITMQ_HOST: ${RABBITMQ_HOST}
+     RABBITMQ_PORT: ${RABBITMQ_PORT}
+     RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+     RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+     RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+     KAFKA_BROKER: ${KAFKA_BROKER}
+     REDIS_URL: ${REDIS_URL}
+     EUREKA_URL: ${EUREKA_URL}
+     EMAIL_HOST: ${EMAIL_HOST}
+     EMAIL_PORT: ${EMAIL_PORT}
+     EMAIL_USERNAME: ${EMAIL_USERNAME}
+     EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+     KEYCLOAK_JWK_URI: ${KEYCLOAK_JWK_URI}
+    volumes:
+      - ../Logs:/workspace/Logs
+    restart: unless-stopped
+
+  order-service:
+    depends_on:
+      - product-service
+      - user-service
+      - eureka-server
+      - config-server
+    container_name: order
+    image: ishonpanda/ecomm-order
+    networks:
+      - backend
+    ports:
+      - "8084:8084"
+    environment:
+       ZIPKIN_URL: ${ZIPKIN_URL}
+       EUREKA_INSTANCE_HOSTNAME: order
+       SPRING_CONFIG_IMPORT: configserver:http://config:8888
+       CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+       RABBITMQ_HOST: ${RABBITMQ_HOST}
+       RABBITMQ_PORT: ${RABBITMQ_PORT}
+       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+       RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+       KAFKA_BROKER: ${KAFKA_BROKER}
+       POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+       POSTGRES_URL: ${POSTGRES_URL}
+       REDIS_URL: ${REDIS_URL}
+       EUREKA_URL: ${EUREKA_URL}
+       KEYCLOAK_URI: ${KEYCLOAK_URI}
+       KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+       KEYCLOAK_CLIENT_UID: ${KEYCLOAK_CLIENT_UID}
+       KEYCLOAK_JWT_ISSUER: ${KEYCLOAK_JWT_ISSUER}
+       KEYCLOAK_JWK_URI: ${KEYCLOAK_JWK_URI}
+    volumes:
+      - ../Logs:/workspace/Logs
+    restart: unless-stopped
+
+  product-service:
+    depends_on:
+      - eureka-server
+      - config-server
+    container_name: product
+    image: ishonpanda/ecomm-product
+    networks:
+      - backend
+    ports:
+      - "8083:8083"
+    environment:
+       ZIPKIN_URL: ${ZIPKIN_URL}
+       EUREKA_INSTANCE_HOSTNAME: product
+       SPRING_CONFIG_IMPORT: configserver:http://config:8888
+       CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+       RABBITMQ_HOST: ${RABBITMQ_HOST}
+       RABBITMQ_PORT: ${RABBITMQ_PORT}
+       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+       RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+       KAFKA_BROKER: ${KAFKA_BROKER}
+       POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+       POSTGRES_URL: ${POSTGRES_URL}
+       REDIS_URL: ${REDIS_URL}
+       EUREKA_URL: ${EUREKA_URL}
+       KEYCLOAK_URI: ${KEYCLOAK_URI}
+       KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+       KEYCLOAK_CLIENT_UID: ${KEYCLOAK_CLIENT_UID}
+       KEYCLOAK_JWT_ISSUER: ${KEYCLOAK_JWT_ISSUER}
+       KEYCLOAK_JWK_URI: ${KEYCLOAK_JWK_URI}
+    volumes:
+      - ../Logs:/workspace/Logs
+    restart: unless-stopped
+
+  user-service:
+    depends_on:
+      - eureka-server
+      - config-server
+    container_name: user
+    image: ishonpanda/ecomm-user
+    networks:
+      - backend
+    ports:
+      - "8082:8082"
+    environment:
+       ZIPKIN_URL: ${ZIPKIN_URL}
+       EUREKA_INSTANCE_HOSTNAME: user
+       SPRING_CONFIG_IMPORT: configserver:http://config:8888
+       CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+       RABBITMQ_HOST: ${RABBITMQ_HOST}
+       RABBITMQ_PORT: ${RABBITMQ_PORT}
+       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+       RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+       KAFKA_BROKER: ${KAFKA_BROKER}
+       MONGODB_URL: ${MONGODB_URL}
+       REDIS_URL: ${REDIS_URL}
+       EUREKA_URL: ${EUREKA_URL}
+       KEYCLOAK_URI: ${KEYCLOAK_URI}
+       KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+       KEYCLOAK_CLIENT_UID: ${KEYCLOAK_CLIENT_UID}
+       KEYCLOAK_JWT_ISSUER: ${KEYCLOAK_JWT_ISSUER}
+       KEYCLOAK_JWK_URI: ${KEYCLOAK_JWK_URI}
+    volumes:
+      - ../Logs:/workspace/Logs
+    restart: unless-stopped
+
+  gateway:
+    depends_on:
+      - config-server
+      - eureka-server
+      - notification-service
+      - order-service
+      - product-service
+      - user-service
+    container_name: gateway
+    image: ishonpanda/ecomm-gateway
+    networks:
+      - backend
+    ports:
+      - "8080:8080"
+    environment:
+       ZIPKIN_URL: ${ZIPKIN_URL}
+       EUREKA_INSTANCE_HOSTNAME: gateway
+       SPRING_CONFIG_IMPORT: configserver:http://config:8888
+       CONFIG_SERVER_URL: ${CONFIG_SERVER_URL}
+       RABBITMQ_HOST: ${RABBITMQ_HOST}
+       RABBITMQ_PORT: ${RABBITMQ_PORT}
+       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+       RABBITMQ_VHOST: ${RABBITMQ_VHOST}
+       REDIS_URL: ${REDIS_URL}
+       EUREKA_URL: ${EUREKA_URL}
+       KEYCLOAK_URI: ${KEYCLOAK_URI}
+       KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+       KEYCLOAK_CLIENT_UID: ${KEYCLOAK_CLIENT_UID}
+       KEYCLOAK_JWT_ISSUER: ${KEYCLOAK_JWT_ISSUER}
+       KEYCLOAK_JWK_URI: ${KEYCLOAK_JWK_URI}
+    volumes:
+      - ../Logs:/workspace/Logs
+    restart: unless-stopped
+
+#Volumes
+volumes:
+  kafka_data:
+
+#Networks
+networks:
+  backend:
+    driver: bridge
