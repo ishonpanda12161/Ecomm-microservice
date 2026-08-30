@@ -12,6 +12,7 @@ services:
       - "start-dev"
     networks:
       - backend
+    mem_limit: 800m
 
   kafka:
     image: confluentinc/cp-kafka:8.0.7
@@ -36,6 +37,7 @@ services:
       - kafka_data:/var/lib/kafka/data
     networks:
       - backend
+    mem_limit: 800m
 
   config-server:
     container_name: config
@@ -56,6 +58,7 @@ services:
     volumes:
       - ../Logs:/workspace/Logs
     restart: unless-stopped
+    mem_limit: 512m
 
   eureka-server:
     depends_on:
@@ -79,6 +82,7 @@ services:
     volumes:
       - ../Logs:/workspace/Logs
     restart: unless-stopped
+    mem_limit: 512m
 
   notification-service:
     depends_on:
@@ -112,6 +116,7 @@ services:
     volumes:
       - ../Logs:/workspace/Logs
     restart: unless-stopped
+    mem_limit: 512m
 
   order-service:
     depends_on:
@@ -151,6 +156,7 @@ services:
     volumes:
       - ../Logs:/workspace/Logs
     restart: unless-stopped
+    mem_limit: 800m
 
   product-service:
     depends_on:
@@ -188,6 +194,7 @@ services:
     volumes:
       - ../Logs:/workspace/Logs
     restart: unless-stopped
+    mem_limit: 512m
 
   user-service:
     depends_on:
@@ -223,6 +230,7 @@ services:
     volumes:
       - ../Logs:/workspace/Logs
     restart: unless-stopped
+    mem_limit: 512m
 
   gateway:
     depends_on:
@@ -260,6 +268,7 @@ services:
     volumes:
       - ../Logs:/workspace/Logs
     restart: unless-stopped
+    mem_limit: 512m
 
 #Volumes
 volumes:

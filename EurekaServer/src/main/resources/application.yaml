@@ -18,9 +18,15 @@ logging:
   pattern:
     file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%X{traceId}] %logger{36} - %msg%n'
   level:
-    root: INFO
+    root: WARN
   file:
-    name: Logs/${spring.application.name}.log
+    name: /workspace/Logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: /workspace/Logs/${spring.application.name}.%d{yyyy-MM-dd}.log
+      max-history: 1
+      clean-history-on-start: true
+
 #Server
 server:
   port: 8761
