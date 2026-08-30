@@ -38,6 +38,8 @@ public class OrderServiceImpl implements OrderService{
     private String completedKey;
     @Value("${exchange.key.shipped}")
     private String shippedKey;
+    @Value("${exchange.key.cancelled}")
+    private String cancelledKey;
     @Value("${exchange.key.confirmed}")
     private String confirmedKey;
     private final OrderItemRepository orderItemRepository;
@@ -49,7 +51,7 @@ public class OrderServiceImpl implements OrderService{
     private final OrderItemMapper orderItemMapper;
     //private final RabbitTemplate rabbitTemplate;
     private final StreamBridge streamBridge;
-    private List<OrderStatus> cancellableStatus = List.of(OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.CREATED);
+    private List<OrderStatus> cancellableStatus = List.of(OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.CREATED, OrderStatus.SHIPPED);
 
 
     @Transactional
@@ -114,7 +116,8 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Boolean cancelOrder(String userId, String orderId) {
 
-        Order order = orderRepository.findByIdAndUserId(orderId,userId);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order","ID",orderId,LocalDateTime.now()));
         if(order==null)
         {
             return Boolean.FALSE;
@@ -147,7 +150,7 @@ public class OrderServiceImpl implements OrderService{
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        streamBridge.send("createOrder-out-0",event);
+                        streamBridge.send("cancelOrder-out-0",event);
                     }
                 }
         );
@@ -158,7 +161,9 @@ public class OrderServiceImpl implements OrderService{
     @Transactional
     @Override
     public Boolean updateOrderStatus(String userId, String orderId, OrderStatus status) {
-        Order order = orderRepository.findByIdAndUserId(orderId,userId);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order","ID",orderId,LocalDateTime.now()));
+
         if(order==null)
         {
             return Boolean.FALSE;
@@ -167,8 +172,6 @@ public class OrderServiceImpl implements OrderService{
         {
             return Boolean.FALSE;
         }
-        order.setStatus(status);
-        orderRepository.save(order);
 
         String key = switch (status) {
             case COMPLETED -> completedKey;
@@ -181,6 +184,8 @@ public class OrderServiceImpl implements OrderService{
                     LocalDateTime.now()
             );
         };
+        order.setStatus(status);
+        orderRepository.save(order);
 
         OrderEvent event = orderMapper.toOrderEvent(order);
         UserResponseDTO userResponseDTO = getUser(userId);
