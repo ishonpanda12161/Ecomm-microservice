@@ -1,6 +1,4 @@
-# Ecomm Microservice (Short README)
-
-## Design
+## Systen overview
 ![Ecommerce Design](./assets/Ecommerce.drawio.png)
 
 ## What I Learnt
@@ -14,7 +12,7 @@
 - **Prometheus + Grafana + Loki**: observability makes it possible to monitor metrics, logs, and service health in one place.
 - **Zipkin**: distributed tracing helps follow a single request across multiple services during failures.
 
-## Zipkin Tracing
+## Request Tracing
 ![Zipkin Tracing](./assets/tracing.png)
 
 ## Build the Project
@@ -34,6 +32,36 @@ From the repository root:
    ./jib-build.sh
    ```
 
+3. Add env:
+   ```
+      CORS_ORIGIN=
+      CONFIG_SERVER_URL=
+      CONFIG_FETCH_URL=h
+      ZIPKIN_URL=
+      RABBITMQ_HOST=
+      RABBITMQ_PORT=
+      RABBITMQ_USERNAME=
+      RABBITMQ_PASSWORD=
+      RABBITMQ_VHOST=
+      KAFKA_BROKER=
+      MONGODB_URL=
+      POSTGRES_USERNAME=
+      POSTGRES_PASSWORD=
+      POSTGRES_URL=
+      REDIS_URL=
+      EUREKA_URL=
+      KEYCLOAK_URI=
+      KEYCLOAK_REALM=
+      KEYCLOAK_CLIENT_ID=
+      KEYCLOAK_CLIENT_SECRET=
+      KEYCLOAK_CLIENT_UID=
+      KEYCLOAK_JWT_ISSUER=
+      KEYCLOAK_JWK_URI=
+      EMAIL_HOST=
+      EMAIL_PORT=
+      EMAIL_USERNAME=
+      EMAIL_PASSWORD=
+   ```
 ## Quick Setup
 1. Ensure Docker is running.
 2. Set required environment variables used in `Build/docker-compose.yml` (database, Kafka, Redis, RabbitMQ, Keycloak, email, config/eureka/zipkin URLs).
