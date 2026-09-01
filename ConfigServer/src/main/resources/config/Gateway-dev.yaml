@@ -26,7 +26,9 @@ spring:
         cors-configurations:
           '[/**]':
             allowed-origins:
-              - ${CORS_ORIGIN}
+              - "${CORS_ORIGIN}"
+              - "http://localhost:4321"
+              - "http://127.0.0.1:4321"
             allowed-methods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"]
             allowed-headers: ["*"]
             exposed-headers: ["Authorization","Content-Type"]
