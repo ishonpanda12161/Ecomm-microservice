@@ -1,4 +1,4 @@
-## Systen overview
+## System overview
 ![Ecommerce Design](./assets/Ecommerce.drawio.png)
 
 ## What I Learnt
